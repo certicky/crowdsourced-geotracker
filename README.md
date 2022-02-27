@@ -1,11 +1,13 @@
+### Attention: Looking for developers, so we can deploy this ASAP! Please contact me at certicky (at) gmail (dot) com and I can give you access.
+
 # Crowdsourced GeoTracker
 
-Crowdsourced GeoTracker is an open-source project that allows the public to easily report and track the
-geolocation of anyone or anything they spot outside, using a mobile app or web frontend.
+Crowdsourced GeoTracker is an open-source project that allows the public to **easily report and track the
+geolocation of anyone** or anything they spot outside, using a mobile app or web frontend.
 
 The project can be configured to track all kinds of things - here are a few examples:
 
-* Civilians can report on the movements of an inviding army when they see them, so others are able to prepare (evacuate or make some cocktails).
+* **Civilians can report on the movements of an inviding army when they see them, so others are able to prepare (evacuate or make some cocktails).**
 * Citizens can report damaged public equipement to local authorities / municipalities, so they can quickly make repairs.
 * Drivers can report traffic accidents or delays.
 * Tracking the occurences of wild animals; Bird watching.
