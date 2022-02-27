@@ -1,0 +1,9 @@
+module.exports = {
+  dbUser: <YOUR DB USER>,
+  dbName: <YOUR DB NAME>,
+  dbPassword: <YOUR DB PASSWORD>,
+  dbPort: 5432,
+  dbHost: 'localhost',
+  listenPort: 3000,
+  supportedTypes: ['INFANTRY', 'VEHICLES', 'AIRCRAFT']
+}
