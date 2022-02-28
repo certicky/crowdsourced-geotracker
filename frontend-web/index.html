@@ -23,6 +23,12 @@
         oReq.send()
       }
 
+      function getMarkerColorFromType (type) {
+        if (type === 'VEHICLES') return 'blue'
+        if (type === 'AIRCRAFT') return 'teal'
+        return 'red'
+      }
+
       // load reports from API, using current map's bounds
       function loadReportsFromAPI () {
         var bounds = map.getBounds()
@@ -44,8 +50,20 @@
                 markers[loc.id] = loc
                 const marker = new google.maps.Marker({
                   position: new google.maps.LatLng(loc.latitude, loc.longitude),
-                  label: loc.type.toUpperCase()[0],
-                  map: map
+                  label: {
+                    text: loc.type.toUpperCase()[0],
+                    color: 'white'
+                  },
+                  title: loc.type.toUpperCase(),
+                  map: map,
+                  icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    strokeColor: getMarkerColorFromType(loc.type),
+                    fillColor: getMarkerColorFromType(loc.type),
+                    strokeWeight: 2,
+                    fillOpacity: 0.5,
+                    scale: 9
+                  }
                 })
               }
             })
