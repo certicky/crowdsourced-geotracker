@@ -1,4 +1,5 @@
 backend/settings.js
+frontend-web/settings.js
 
 # Logs
 logs
