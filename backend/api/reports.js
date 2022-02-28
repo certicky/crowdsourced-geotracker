@@ -23,7 +23,7 @@ const pool = new Pool({
 //   - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
 //   - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 const getReportsInBoundingBox = (request, response) => {
-  let columns = 'id, location, type, time'
+  let columns = 'id, ST_Y(location::geometry) AS lat, ST_X(location::geometry) as lon, type, time'
   if (request.query.img && ['THUMBNAIL', 'FULL'].includes(request.query.img)) {
     if (request.query.img === 'THUMBNAIL') columns += ', img_thumb'
     if (request.query.img === 'FULL') columns += ', img_full'
