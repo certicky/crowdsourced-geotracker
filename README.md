@@ -49,6 +49,23 @@ CREATE INDEX report_location_idx ON reports USING GIST(location);
 * Copy the `settings.js.example` file to `settings.js` and update the values in it.
 * Run the backend: `npm run dev`
 
+### API
+
+* [GET] /reports
+```
+Returns all the reports from the specified bounding box.
+Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL
+GET parameters:
+  - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
+  - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
+```
+
+* [POST] /reports
+```
+Adds a new report to DB.
+Example: http://localhost:3000/reports with BODY: lat = 49.71422916693619, lon = 26.66829512680357, type = AIRCRAFT
+```
+
 ## Mobile App
 
 TODO: The app is not implemented yet. Its planned functions and some notes:
@@ -62,6 +79,7 @@ TODO: The app is not implemented yet. Its planned functions and some notes:
 
 ## Web Frontend
 
-TODO: The frontend is now implemented yet.
+TODO: The frontend is under construction at the moment.
 * The web should display a map of recent reports in the area. The default area displayed should be set according to browser's location.
-* It should be possible to re-wind the time back (using a slider) to see how the report locations changed over time.
+* It should be possible to rewind the time back (using a slider) to see how the report locations changed over time.
+* We'll probably also allow users to report sightings via this web frontend.
