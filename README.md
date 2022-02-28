@@ -1,4 +1,4 @@
-### Attention: Looking for developers, so we can deploy this ASAP! Please contact me at certicky (at) gmail (dot) com and I can give you access.
+#### Attention: Looking for developers, so we can deploy this ASAP. Please contact me at certicky (at) gmail (dot) com and I can give you access.
 
 # Crowdsourced GeoTracker
 
@@ -12,6 +12,8 @@ The project can be configured to track all kinds of things - here are a few exam
 * Drivers can report traffic accidents or delays.
 * Tracking the occurences of wild animals; Bird watching.
 * ...
+
+![image](https://user-images.githubusercontent.com/3534507/156072537-e054c6be-829a-4540-a3d4-56069b2afd7d.png)
 
 ## Backend
 
@@ -52,7 +54,7 @@ CREATE INDEX report_location_idx ON reports USING GIST(location);
 
 ### API
 
-* [GET] /reports
+* **[GET] /reports**
 ```
 Returns all the reports from the specified bounding box.
 Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL
@@ -61,7 +63,7 @@ GET parameters:
   - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 ```
 
-* [POST] /reports
+* **[POST] /reports**
 ```
 Adds a new report to DB.
 Example: http://localhost:3000/reports with BODY: lat = 49.71422916693619, lon = 26.66829512680357, type = AIRCRAFT
