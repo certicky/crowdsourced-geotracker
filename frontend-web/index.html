@@ -9,29 +9,81 @@
     <div id="map"></div>
 
     <script type="text/javascript">
+      let markers = {}
+      let dbRequestTimeout = null
+      let map = null
+
+      // call any GET request
+      function requestAPIGet (uri, params, callback) {
+        var oReq = new XMLHttpRequest()
+        oReq.addEventListener('load', function reqListener () {
+          if (callback && this.response) callback(this.response)
+        })
+        oReq.open('GET', settings.backendUrl + uri + ((params && Object.keys(params) && Object.keys(params).length) ? '?' + Object.keys(params).map(k => k + '=' + params[k]).join('&') : ''))
+        oReq.send()
+      }
+
+      // load reports from API, using current map's bounds
+      function loadReportsFromAPI () {
+        var bounds = map.getBounds()
+        var ne = bounds.getNorthEast()
+        var sw = bounds.getSouthWest()
+
+        requestAPIGet ('/reports', {
+          latmin: sw.lat(),
+          lonmin: sw.lng(),
+          latmax: ne.lat(),
+          lonmax: ne.lng(),
+          img: 'THUMBNAIL'
+        }, (response) => {
+
+          const locations = JSON.parse(response)
+          if (locations && locations.length) {
+            locations.forEach(loc => {
+              if (!markers[loc.id]) {
+                markers[loc.id] = loc
+                const marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                  label: loc.type.toUpperCase()[0],
+                  map: map
+                })
+              }
+            })
+          }
+        })
+      }
+
       function initMap () {
-      	// create the map
-        const map = new google.maps.Map(document.getElementById('map'), {
+        // create the map
+        map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10,
           center: { lat: 50.41311166314775, lng: 30.46506531920826 }
-        });
+        })
 
         // try to center the map on current location
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position){
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var coords = new google.maps.LatLng(latitude, longitude);
-            map.setCenter(coords);
-          });
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var latitude = position.coords.latitude
+            var longitude = position.coords.longitude
+            var coords = new google.maps.LatLng(latitude, longitude)
+            map.setCenter(coords)
+          })
         }
+
+        // listen for map bounds change and reload the data (at most once per 1000ms)
+        google.maps.event.addListener(map, 'bounds_changed', function () {
+          if (dbRequestTimeout) {
+            window.clearTimeout(dbRequestTimeout)
+          }
+          dbRequestTimeout = window.setTimeout(loadReportsFromAPI, 1000)
+        })
       }
 
       // load Google Maps
-      var script = document.createElement('script');
-      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + settings.googleMapsAPIKey + '&callback=initMap&libraries=&v=weekly';
-      script.async = true;
-      document.head.appendChild(script);
+      var script = document.createElement('script')
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + settings.googleMapsAPIKey + '&callback=initMap&libraries=&v=weekly'
+      script.async = true
+      document.head.appendChild(script)
     </script>
   </body>
 </html>
