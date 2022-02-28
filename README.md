@@ -47,6 +47,7 @@ CREATE INDEX report_location_idx ON reports USING GIST(location);
 ```
 
 * Copy the `settings.js.example` file to `settings.js` and update the values in it.
+* Insert some initial data from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>: `node importInitialReports.js`
 * Run the backend: `npm run dev`
 
 ### API
@@ -79,7 +80,13 @@ TODO: The app is not implemented yet. Its planned functions and some notes:
 
 ## Web Frontend
 
-TODO: The frontend is under construction at the moment.
+### Installation
+* Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
+* Navigate to folder frontend-web: `cd crowdsourced-geotracker/frontend-web`
+* Copy the `settings.js.example` file to `settings.js` and update the values in it. You need to point it to your running backend and provide your Google Maps API key.
+* Then just open `index.html` in your web browser.
+
+The frontend is under construction at the moment. Pla
 * The web should display a map of recent reports in the area. The default area displayed should be set according to browser's location.
 * It should be possible to rewind the time back (using a slider) to see how the report locations changed over time.
 * We'll probably also allow users to report sightings via this web frontend.

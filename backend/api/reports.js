@@ -38,7 +38,7 @@ const getReportsInBoundingBox = (request, response) => {
       console.log(error)
       throw error
     }
-    response.status(200).json(results.rows)
+    if (response) response.status(200).json(results.rows)
   })
 }
 
@@ -55,7 +55,7 @@ const createReport = (request, response) => {
       console.log(error)
       throw error
     }
-    response.status(201).send('Report added.')
+    if (response) response.status(201).send('Report added.')
   })
 }
 
