@@ -3,7 +3,7 @@ module.exports = {
   dbName: <YOUR DB NAME>,
   dbPassword: <YOUR DB PASSWORD>,
   dbPort: 5432,
-  dbHost: 'localhost',
+  dbHost: '127.0.0.1',
   listenPort: 3000,
   supportedTypes: ['INFANTRY', 'VEHICLES', 'AIRCRAFT']
 }
