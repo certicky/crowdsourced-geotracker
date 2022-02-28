@@ -18,9 +18,22 @@ const pool = new Pool({
 })
 
 // (GET) Returns all the reports from the specified bounding box.
-// Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246
+// Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL
+// Parameters:
+//   - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
+//   - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 const getReportsInBoundingBox = (request, response) => {
-  pool.query('SELECT * FROM reports WHERE reports.location && ST_MakeEnvelope(' + request.query.lonmin + ', ' + request.query.latmin + ', ' + request.query.lonmax + ', ' + request.query.latmax + ', 4326)', (error, results) => {
+  let columns = 'id, location, type, time'
+  if (request.query.img && ['THUMBNAIL', 'FULL'].includes(request.query.img)) {
+    if (request.query.img === 'THUMBNAIL') columns += ', img_thumb'
+    if (request.query.img === 'FULL') columns += ', img_full'
+  }
+  if (!request.query.latmin || request.query.latmin.toString() !== parseFloat(request.query.latmin).toString()) throw new Error('Incorrect input: latmin')
+  if (!request.query.latmax || request.query.latmax.toString() !== parseFloat(request.query.latmax).toString()) throw new Error('Incorrect input: latmin')
+  if (!request.query.lonmin || request.query.lonmin.toString() !== parseFloat(request.query.lonmin).toString()) throw new Error('Incorrect input: latmin')
+  if (!request.query.lonmax || request.query.lonmax.toString() !== parseFloat(request.query.lonmax).toString()) throw new Error('Incorrect input: latmin')
+
+  pool.query('SELECT ' + columns + ' FROM reports WHERE reports.location && ST_MakeEnvelope(' + request.query.lonmin + ', ' + request.query.latmin + ', ' + request.query.lonmax + ', ' + request.query.latmax + ', 4326)', (error, results) => {
     if (error) {
       console.log(error)
       throw error

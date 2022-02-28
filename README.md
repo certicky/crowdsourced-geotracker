@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS public.reports
     location geography(Point,4326),
     type character varying(32) COLLATE pg_catalog."default",
     "time" timestamp without time zone NOT NULL,
+    img_thumb bytea,
+    img_full bytea,
     CONSTRAINT reports_pkey PRIMARY KEY (id)
 )
 TABLESPACE pg_default;
