@@ -88,7 +88,7 @@ TODO: The app is not implemented yet. Its planned functions and some notes:
 * Copy the `settings.js.example` file to `settings.js` and update the values in it. You need to point it to your running backend and provide your Google Maps API key.
 * Then just open `index.html` in your web browser.
 
-The frontend is under construction at the moment. Pla
-* The web should display a map of recent reports in the area. The default area displayed should be set according to browser's location.
-* It should be possible to rewind the time back (using a slider) to see how the report locations changed over time.
-* We'll probably also allow users to report sightings via this web frontend.
+Functions:
+* The web displays a map of recent reports in the area. The default area displayed is set according to browser's location.
+* (under construction) It will be possible to rewind the time back using a slider to see how the report locations changed over time.
+* (under construction) We'll also allow users to report sightings via this web frontend too, not only the mobile app.
