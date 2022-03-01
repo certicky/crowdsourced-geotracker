@@ -77,9 +77,11 @@ Example: http://localhost:3000/reports with BODY: lat = 49.71422916693619, lon =
 * Navigate to folder frontend-mobile: `cd crowdsourced-geotracker/frontend-mobile`
 * Install the dependencies: `npm install`
 * Install the react-native-cli globally: `npm install -g react-native-cli`
-* Run `npx react-native start` and keep it running in the background. Watch its output while developing.
+* Copy the `/android/app/src/main/AndroidManifest.xml.example` file to `/android/app/src/main/AndroidManifest.xml` and update the value of `com.google.android.geo.API_KEY` in it. You need to provide your Google Maps API key.
+* Go to <https://console.cloud.google.com/apis/> and make sure you have the following enabled for your project: Google Play Android Developer API, Maps SDK for Android
+* Run `npm start -- --reset-cache` or `npx react-native start` and keep it running in the background. Watch its output while developing.
 * Run `react-native run-android`. That should open a window with the Android emulator running your app.
-
+* You can get more logs by calling `adb logcat`
 
 The app is under construction. Some planned functions and notes:
 * Report the sighting of an object of interest - the report location should be pre-set by the app automatically, using device's location (should be possible to adjust it manually).
