@@ -15,7 +15,7 @@ The project can be configured to track all kinds of things - here are a few exam
 
 ![image](https://user-images.githubusercontent.com/3534507/156072537-e054c6be-829a-4540-a3d4-56069b2afd7d.png)
 
-## Backend
+## Backend (Node.JS + Express + Postgres)
 
 ### Installation
 
@@ -69,10 +69,19 @@ Adds a new report to DB.
 Example: http://localhost:3000/reports with BODY: lat = 49.71422916693619, lon = 26.66829512680357, type = AIRCRAFT
 ```
 
-## Mobile App
+## Mobile App (React Native)
 
-TODO: The app is not implemented yet. Its planned functions and some notes:
+### Installation
+* Set up your Android development environment, if haven’t done so. Make sure you can successfully run an Android app on an emulator.
+* Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
+* Navigate to folder frontend-mobile: `cd crowdsourced-geotracker/frontend-mobile`
+* Install the dependencies: `npm install`
+* Install the react-native-cli globally: `npm install -g react-native-cli`
+* Run `npx react-native start` and keep it running in the background. Watch its output while developing.
+* Run `react-native run-android`. That should open a window with the Android emulator running your app.
 
+
+The app is under construction. Some planned functions and notes:
 * Report the sighting of an object of interest - the report location should be pre-set by the app automatically, using device's location (should be possible to adjust it manually).
 * Reporting needs to be very quick and simple. UI needs to be usable under non-ideal conditions.
 * An option to attach a photo of the sighting - it should be possible to take a picture directly from within the app. The picture should be sent downscaled to decrease data usage.
@@ -80,7 +89,7 @@ TODO: The app is not implemented yet. Its planned functions and some notes:
 * If possible, the device's geolocation should only be enabled while sending the report. If it was disabled before reporting, it should auto-disable after the report is sent.
 * When users aren't reporting a sighting, the app should display a map of recent reports around them.
 
-## Web Frontend
+## Web Frontend (basic HTML with a bit of JS)
 
 ### Installation
 * Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
