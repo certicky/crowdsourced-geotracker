@@ -12,6 +12,7 @@
       let markers = {}
       let dbRequestTimeout = null
       let map = null
+      let displayedTime = Math.round(Date.now() / 1000)
 
       // call any GET request
       function requestAPIGet (uri, params, callback) {
@@ -41,8 +42,8 @@
           latmax: ne.lat(),
           lonmax: ne.lng(),
           img: 'THUMBNAIL',
-          timemin: Math.round(Date.now() / 1000) - (7 * 86400),
-          timemax: Math.round(Date.now() / 1000)
+          timemin: displayedTime - 3600,
+          timemax: displayedTime
 
         }, (response) => {
           const locations = JSON.parse(response)
@@ -50,8 +51,8 @@
             locations.forEach(loc => {
               if (!markers[loc.id]) {
                 markers[loc.id] = loc
-                const marker = new google.maps.Marker({
-                  position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                new google.maps.Marker({
+                  position: new google.maps.LatLng(loc.lat, loc.lon),
                   label: {
                     text: loc.type.toUpperCase()[0],
                     color: 'white'
@@ -101,7 +102,7 @@
 
       // load Google Maps
       var script = document.createElement('script')
-      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + settings.googleMapsAPIKey + '&callback=initMap&libraries=&v=weekly'
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + settings.googleMapsAPIKey + '&callback=initMap'
       script.async = true
       document.head.appendChild(script)
     </script>
