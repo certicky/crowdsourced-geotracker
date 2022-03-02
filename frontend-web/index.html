@@ -30,6 +30,25 @@
         return 'red'
       }
 
+      function setDisplayedTime (newTime) {
+        if (displayedTime === newTime) return
+        Object.keys(markers).forEach(locId => {
+          markers[locId].markerObject.setMap(null)
+          markers[locId].markerObject = null
+        })
+        markers = {}
+        displayedTime = newTime
+        loadReportsFromAPI()
+      }
+
+      function decrementHour () {
+        setDisplayedTime(displayedTime - 3600)
+      }
+
+      function incrementHour () {
+        setDisplayedTime(displayedTime + 3600)
+      }
+
       // load reports from API, using current map's bounds
       function loadReportsFromAPI () {
         var bounds = map.getBounds()
@@ -47,11 +66,12 @@
 
         }, (response) => {
           const locations = JSON.parse(response)
+          console.log('locations from API', displayedTime, locations)
           if (locations && locations.length) {
             locations.forEach(loc => {
               if (!markers[loc.id]) {
                 markers[loc.id] = loc
-                new google.maps.Marker({
+                markers[loc.id].markerObject = new google.maps.Marker({
                   position: new google.maps.LatLng(loc.lat, loc.lon),
                   label: {
                     text: loc.type.toUpperCase()[0],
