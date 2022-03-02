@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS public.reports
 TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.reports OWNER to geotracker_user;
 CREATE INDEX report_location_idx ON reports USING GIST(location);
+CREATE INDEX time_idx ON reports USING btree("time" DESC);
 ```
 
 * Copy the `settings.js.example` file to `settings.js` and update the values in it.
@@ -60,6 +61,7 @@ Returns all the reports from the specified bounding box.
 Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL
 GET parameters:
   - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
+  - timemin, timemax: Minimum and maximum timestamp of the report creation in second-UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
   - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 ```
 

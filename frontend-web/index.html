@@ -40,9 +40,11 @@
           lonmin: sw.lng(),
           latmax: ne.lat(),
           lonmax: ne.lng(),
-          img: 'THUMBNAIL'
-        }, (response) => {
+          img: 'THUMBNAIL',
+          timemin: Math.round(Date.now() / 1000) - (7 * 86400),
+          timemax: Math.round(Date.now() / 1000)
 
+        }, (response) => {
           const locations = JSON.parse(response)
           if (locations && locations.length) {
             locations.forEach(loc => {
