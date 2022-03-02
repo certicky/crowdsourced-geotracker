@@ -19,12 +19,12 @@ The project can be configured to track all kinds of things - here are a few exam
 
 ### Installation
 
-* Install Node.JS
-* Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
-* Navigate to folder backend: `cd crowdsourced-geotracker/backend`
-* Install the dependencies: `npm install`
-* Install Postgres and Postgis extension (depending on your OS)
-* Create a DB user, database and tables using the following commands (don't forget to change the credentials and create indexes):
+1. Install Node.JS
+2. Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
+3. Navigate to folder backend: `cd crowdsourced-geotracker/backend`
+4. Install the dependencies: `npm install`
+5. Install Postgres and Postgis extension (depending on your OS)
+6. Create a DB user, database and tables using the following commands (don't forget to change the credentials and create indexes):
 
 ```
 CREATE USER geotracker_user WITH PASSWORD <YOUR DB PASSWORD>;
@@ -47,11 +47,12 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.reports OWNER to geotracker_user;
 CREATE INDEX report_location_idx ON reports USING GIST(location);
 CREATE INDEX time_idx ON reports USING btree("time" DESC);
+CREATE UNIQUE INDEX duplicates_constraint ON reports (type, date_trunc('hour', "time"), ST_SnapToGrid(location::geometry, 0.0001)); -- this prevents having multiple reports with very similar location and same type reported in the same hour
 ```
 
-* Copy the `settings.js.example` file to `settings.js` and update the values in it.
-* Insert some initial data from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>: `node importInitialReports.js`
-* Run the backend: `npm run dev`
+7. Copy the `settings.js.example` file to `settings.js` and update the values in it.
+8. Insert some initial data from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>: `node importInitialReports.js`
+9. Run the backend: `npm run listen`
 
 ### API
 

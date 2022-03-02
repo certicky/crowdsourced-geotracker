@@ -57,7 +57,18 @@ const createReport = (request, response) => {
   if (!lat || lat.toString() !== parseFloat(lat).toString()) throw new Error('Incorrect input: lat (supported: float)')
   if (!type || !supportedTypes.includes(type)) throw new Error('Incorrect input: type. (supported: ' + supportedTypes.toString() + ')')
 
-  pool.query('INSERT INTO reports (location, type, time) VALUES (CAST( ST_SetSRID(ST_Point( ' + parseFloat(lon) + ', ' + parseFloat(lat) + '), 4326) AS geography), $1, NOW())', [type], (error, results) => {
+  const query = `
+    INSERT INTO reports (location, type, time)
+    VALUES (
+      CAST( ST_SetSRID(ST_Point( ` + parseFloat(lon) + `, ` + parseFloat(lat) + `), 4326) AS geography),
+      $1,
+      NOW()
+    )
+    ON CONFLICT (type, date_trunc('hour', "time"), ST_SnapToGrid(location::geometry, 0.0001)) DO
+    UPDATE SET time = NOW()
+  `
+
+  pool.query(query, [type], (error, results) => {
     if (error) {
       console.log(error)
       throw error

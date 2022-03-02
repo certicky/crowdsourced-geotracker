@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js"
+    "listen": "node index.js"
   },
   "keywords": [],
   "author": "community project",
