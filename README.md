@@ -19,7 +19,7 @@ The project can be configured to track all kinds of things - here are a few exam
 
 ### Installation
 
-1. Install Node.JS
+1. Install Node.JS and npm (on Ubuntu/Debian run `sudo apt install nodejs npm`)
 2. Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
 3. Navigate to folder backend: `cd crowdsourced-geotracker/backend`
 4. Install the dependencies: `npm install`
@@ -35,16 +35,15 @@ CREATE EXTENSION postgis;
 ```
 CREATE TABLE IF NOT EXISTS public.reports
 (
-    id integer NOT NULL DEFAULT nextval('reports_id_seq'::regclass),
+    id SERIAL,
     location geography(Point,4326),
     type character varying(32) COLLATE pg_catalog."default",
     "time" timestamp without time zone NOT NULL,
     img_thumb bytea,
     img_full bytea,
     CONSTRAINT reports_pkey PRIMARY KEY (id)
-)
-TABLESPACE pg_default;
-ALTER TABLE IF EXISTS public.reports OWNER to geotracker_user;
+);
+ALTER TABLE public.reports OWNER to geotracker_user;
 CREATE INDEX report_location_idx ON reports USING GIST(location);
 CREATE INDEX time_idx ON reports USING btree("time" DESC);
 CREATE UNIQUE INDEX duplicates_constraint ON reports (type, date_trunc('hour', "time"), ST_SnapToGrid(location::geometry, 0.0001)); -- this prevents having multiple reports with very similar location and same type reported in the same hour
