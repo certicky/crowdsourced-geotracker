@@ -41,8 +41,7 @@ CREATE TABLE IF NOT EXISTS public.reports
     valid_from timestamptz NOT NULL DEFAULT now(),
     valid_until timestamptz NOT NULL DEFAULT now() + interval '1 hour',
     description varchar(256),
-    img_thumb varchar(256),
-    img_full varchar(256),
+    media_url varchar(256),
     CONSTRAINT reports_pkey PRIMARY KEY (id)
 );
 ALTER TABLE public.reports OWNER to geotracker_user;
@@ -65,7 +64,6 @@ Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668
 GET parameters:
   - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
   - time: Point in time that we're looking at in UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
-  - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 ```
 
 * **[POST] /reports**
