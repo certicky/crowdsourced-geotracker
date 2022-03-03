@@ -61,9 +61,7 @@
           latmax: ne.lat(),
           lonmax: ne.lng(),
           img: 'THUMBNAIL',
-          timemin: displayedTime - 3600,
-          timemax: displayedTime
-
+          time: displayedTime
         }, (response) => {
           const locations = JSON.parse(response)
           console.log('locations from API', displayedTime, locations)

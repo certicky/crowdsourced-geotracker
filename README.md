@@ -60,10 +60,10 @@ CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_un
 * **[GET] /reports**
 ```
 Returns all the reports from the specified bounding box.
-Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL
+Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL&time=1646226061
 GET parameters:
   - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
-  - timemin, timemax: Minimum and maximum timestamp of the report creation in second-UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
+  - time: Point in time that we're looking at in UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
   - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 ```
 

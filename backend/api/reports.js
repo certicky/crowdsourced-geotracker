@@ -18,13 +18,13 @@ const pool = new Pool({
 })
 
 // (GET) Returns all the reports from the specified bounding box.
-// Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL
+// Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL&time=1646312461
 // Parameters:
 //   - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
-//   - timemin, timemax: Minimum and maximum timestamp of the report creation in second-UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
+//   - time: Point in time that we're looking at in UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
 //   - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 const getReportsInBoundingBox = (request, response) => {
-  let columns = 'id, ST_Y(location::geometry) AS lat, ST_X(location::geometry) as lon, type, time'
+  let columns = 'id, ST_Y(location::geometry) AS lat, ST_X(location::geometry) as lon, type, valid_from, valid_until'
   if (request.query.img && ['THUMBNAIL', 'FULL'].includes(request.query.img)) {
     if (request.query.img === 'THUMBNAIL') columns += ', img_thumb'
     if (request.query.img === 'FULL') columns += ', img_full'
@@ -33,12 +33,11 @@ const getReportsInBoundingBox = (request, response) => {
   if (!request.query.latmax || request.query.latmax.toString() !== parseFloat(request.query.latmax).toString()) throw new Error('Incorrect input: latmin (supported: float)')
   if (!request.query.lonmin || request.query.lonmin.toString() !== parseFloat(request.query.lonmin).toString()) throw new Error('Incorrect input: latmin (supported: float)')
   if (!request.query.lonmax || request.query.lonmax.toString() !== parseFloat(request.query.lonmax).toString()) throw new Error('Incorrect input: latmin (supported: float)')
-  if (!request.query.timemin || request.query.timemin.toString() !== parseInt(request.query.timemin).toString()) throw new Error('Incorrect input: timemin (supported: integer)')
-  if (!request.query.timemax || request.query.timemax.toString() !== parseInt(request.query.timemax).toString()) throw new Error('Incorrect input: timemax (supported: integer)')
+  if (!request.query.time || request.query.time.toString() !== parseInt(request.query.time).toString()) throw new Error('Incorrect input: time (supported: integer)')
 
   let whereClause = 'WHERE reports.location && ST_MakeEnvelope(' + request.query.lonmin + ', ' + request.query.latmin + ', ' + request.query.lonmax + ', ' + request.query.latmax + ', 4326)'
-  whereClause += ' AND time >= to_timestamp(' + request.query.timemin + ')'
-  whereClause += ' AND time <= to_timestamp(' + request.query.timemax + ')'
+  whereClause += ' AND valid_from <= to_timestamp(' + request.query.time + ')'
+  whereClause += ' AND valid_until >= to_timestamp(' + request.query.time + ')'
 
   pool.query('SELECT ' + columns + ' FROM reports ' + whereClause, (error, results) => {
     if (error) {
