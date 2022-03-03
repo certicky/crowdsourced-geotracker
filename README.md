@@ -13,7 +13,7 @@ The project can be configured to track all kinds of things - here are a few exam
 * Tracking the occurences of wild animals; Bird watching.
 * ...
 
-![3](https://user-images.githubusercontent.com/3534507/156624192-e3fbf211-c778-4f04-95ca-2b13cef74e27.png)
+![4](https://user-images.githubusercontent.com/3534507/156666000-80b3af8c-6fb1-43b2-8a2b-27f9c5fabfd2.png)
 
 ## Backend (Node.JS + Express + Postgres)
 
@@ -60,7 +60,7 @@ CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_un
 * **[GET] /reports**
 ```
 Returns all the reports from the specified bounding box.
-Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL&time=1646226061
+Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&time=1646226061
 GET parameters:
   - latmin, lonmin, latmax, lonmax: Latitude-Longitude definition of the bounding box from which we're getting the reports. Accepts float numbers. (required)
   - time: Point in time that we're looking at in UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
@@ -75,6 +75,7 @@ POST parameters:
   - type: The type of the reported sighting, for example VEHICLES or AIRCRAFT. Accepts values enumerated in supportedTypes in settings.js. (required)
   - validfrom, validuntil: Start and end of the time period when the report is valid in second-UNIX timestamp format. (optional, by default the 1-hour period starting when the request is processed)
   - description: Short textual description fo the sighting. (optional)
+  - media_url: Url to an image of a Tweet that's displayed next to the report. (optional)
 ```
 
 ## Mobile App (React Native)
