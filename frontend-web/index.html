@@ -15,7 +15,7 @@
       let markers = {}
       let dbRequestTimeout = null
       let map = null
-      let displayedTime = Math.round(Date.now() / 1000)
+      let displayedTime = moment().format('X')
 
       // call any GET request
       function requestAPIGet (uri, params, callback) {
