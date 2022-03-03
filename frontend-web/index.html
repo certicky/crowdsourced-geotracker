@@ -2,6 +2,7 @@
   <html>
   <head>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script type="text/javascript" src="./settings.js"></script>
     <script type="text/javascript" src="./map-styles.js"></script>
     <link rel="stylesheet" type="text/css" href="./style.css" />
@@ -12,6 +13,7 @@
 
     <script type="text/javascript">
       const isMobileDevice = (screen.width <= 768)
+      const isDarkMode = (isMobileDevice && (moment().format('HH') >= 18 || moment().format('HH') <= 7))
       let markers = {}
       let dbRequestTimeout = null
       let map = null
@@ -50,6 +52,13 @@
 
       function incrementHour () {
         setDisplayedTime(displayedTime + 3600)
+      }
+
+      function getTweetIdFromUrl (url) {
+        let urlAdjusted = url
+        if (url.includes('?')) urlAdjusted = url.split('?')[0]
+        const parts = urlAdjusted.split('/')
+        return parts[parts.length - 1]
       }
 
       // load reports from API, using current map's bounds
@@ -95,6 +104,20 @@
                   if (loc.type) content += '<div class="marker-tt-type">' + loc.type + '</div>'
                   if (loc.lat && loc.lon) content += '<div class="marker-tt-location">' + loc.lat + ', ' + loc.lon + '</div>'
                   if (loc.type) content += '<div class="marker-tt-valid-from">' + moment(loc.valid_from).format('D. MMM. YYYY HH:mm') + '</div>'
+                  if (loc.media_url && loc.media_url.includes('twitter.com')) {
+                    content += '<div id="tweet-container-' + loc.id + '" class="marker-tt-tweet"></div>'
+                    setTimeout(() => {
+                      twttr.widgets.createTweet(
+                        getTweetIdFromUrl(loc.media_url),
+                        document.getElementById('tweet-container-' + loc.id),
+                        {
+                          theme: isDarkMode ? 'dark' : 'light',
+                          conversation: 'none'
+                        }
+                      )
+                    }, 500)
+                  }
+
                   markers[loc.id].markerTooltip = new google.maps.InfoWindow({
                     content
                   })
@@ -117,7 +140,7 @@
           center: { lat: 50.41311166314775, lng: 30.46506531920826 },
           mapTypeId: 'roadmap',
           controlSize: 80,
-          styles: (isMobileDevice && (moment().format('HH') >= 18 || moment().format('HH') <= 7)) ? stylesNightMode : undefined
+          styles: isDarkMode ? stylesNightMode : undefined
         })
 
         // try to center the map on current location

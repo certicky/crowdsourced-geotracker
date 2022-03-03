@@ -24,11 +24,7 @@ const pool = new Pool({
 //   - time: Point in time that we're looking at in UNIX timestamp format = number of seconds that have elapsed since January 1, 1970 midnight (required)
 //   - img: Size of the image to return with the reports. Accepts 'THUMB', 'FULL' or undefined. If not defined, no image is returned. (optional)
 const getReportsInBoundingBox = (request, response) => {
-  let columns = 'id, ST_Y(location::geometry) AS lat, ST_X(location::geometry) as lon, type, valid_from, valid_until, description'
-  if (request.query.img && ['THUMBNAIL', 'FULL'].includes(request.query.img)) {
-    if (request.query.img === 'THUMBNAIL') columns += ', img_thumb'
-    if (request.query.img === 'FULL') columns += ', img_full'
-  }
+  let columns = 'id, ST_Y(location::geometry) AS lat, ST_X(location::geometry) as lon, type, valid_from, valid_until, description, media_url'
   if (!request.query.latmin || request.query.latmin.toString() !== parseFloat(request.query.latmin).toString()) throw new Error('Incorrect input: latmin (supported: float)')
   if (!request.query.latmax || request.query.latmax.toString() !== parseFloat(request.query.latmax).toString()) throw new Error('Incorrect input: latmin (supported: float)')
   if (!request.query.lonmin || request.query.lonmin.toString() !== parseFloat(request.query.lonmin).toString()) throw new Error('Incorrect input: latmin (supported: float)')
@@ -51,7 +47,7 @@ const getReportsInBoundingBox = (request, response) => {
 // (POST) Adds a new report to DB.
 // Example: http://localhost:3000/reports   ---   lat: 49.71422916693619, lon: 26.66829512680357, type: AIRCRAFT, validfrom: 1646312461, validuntil: 1646316061
 const createReport = (request, response) => {
-  const { lat, lon, type, validfrom, validuntil, description } = request.body
+  const { lat, lon, type, validfrom, validuntil, description, mediaurl } = request.body
   if (!lon || lon.toString() !== parseFloat(lon).toString()) throw new Error('Incorrect input: lon (supported: float)')
   if (!lat || lat.toString() !== parseFloat(lat).toString()) throw new Error('Incorrect input: lat (supported: float)')
   if (!type || !supportedTypes.includes(type)) throw new Error('Incorrect input: type. (supported: ' + supportedTypes.toString() + ')')
@@ -67,18 +63,19 @@ const createReport = (request, response) => {
     )
 
   const query = `
-    INSERT INTO reports (location, type, valid_from, valid_until, description)
+    INSERT INTO reports (location, type, valid_from, valid_until, description, media_url)
     VALUES (
       CAST( ST_SetSRID(ST_Point( ` + parseFloat(lon) + `, ` + parseFloat(lat) + `), 4326) AS geography),
       $1,
       to_timestamp($2),
       to_timestamp($3),
-      $4
+      $4,
+      $5
     )
     ON CONFLICT (type, valid_from, valid_until, ST_SnapToGrid(location::geometry, 0.00001)) DO NOTHING
   `
 
-  pool.query(query, [type, validFromSQL, validUntilSQL, description], (error, results) => {
+  pool.query(query, [type, validFromSQL, validUntilSQL, description, mediaurl], (error, results) => {
     if (error) {
       console.log(error)
       throw error

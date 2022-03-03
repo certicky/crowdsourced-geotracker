@@ -24,3 +24,8 @@ html, body {
   margin-bottom: 0.5rem;
 }
 
+.marker-tt-tweet {
+  min-height: 200px;
+  max-height: 400px;
+}
+

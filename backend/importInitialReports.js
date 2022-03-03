@@ -74,7 +74,8 @@ const main = async () => {
             type: getTypeFromRec(rec),
             validfrom: validityPeriod ? validityPeriod.validfrom : undefined,
             validuntil: validityPeriod ? validityPeriod.validuntil : undefined,
-            description: getDescriptionFromRec(rec) || undefined
+            description: getDescriptionFromRec(rec) || undefined,
+            mediaurl: rec.properties.media_url || undefined
           }
         }, null)
       }
