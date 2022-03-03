@@ -38,15 +38,17 @@ CREATE TABLE IF NOT EXISTS public.reports
     id SERIAL,
     location geography(Point,4326),
     type character varying(32) COLLATE pg_catalog."default",
-    "time" timestamp without time zone NOT NULL,
-    img_thumb bytea,
-    img_full bytea,
+    valid_from timestamptz NOT NULL DEFAULT now(),
+    valid_until timestamptz NOT NULL DEFAULT now() + interval '1 hour',
+    img_thumb varchar(256),
+    img_full varchar(256),
     CONSTRAINT reports_pkey PRIMARY KEY (id)
 );
 ALTER TABLE public.reports OWNER to geotracker_user;
 CREATE INDEX report_location_idx ON reports USING GIST(location);
-CREATE INDEX time_idx ON reports USING btree("time" DESC);
-CREATE UNIQUE INDEX duplicates_constraint ON reports (type, date_trunc('hour', "time"), ST_SnapToGrid(location::geometry, 0.0001)); -- this prevents having multiple reports with very similar location and same type reported in the same hour
+CREATE INDEX valid_from_idx ON reports USING btree(valid_from DESC);
+CREATE INDEX valid_until_idx ON reports USING btree(valid_until DESC);
+CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_until, ST_SnapToGrid(location::geometry, 0.00001)); -- this index prevents having multiple reports with very similar location and same type & validity
 ```
 
 7. Copy the `settings.js.example` file to `settings.js` and update the values in it.
@@ -68,7 +70,11 @@ GET parameters:
 * **[POST] /reports**
 ```
 Adds a new report to DB.
-Example: http://localhost:3000/reports with BODY: lat = 49.71422916693619, lon = 26.66829512680357, type = AIRCRAFT
+Example: http://localhost:3000/reports with BODY: lat = 49.71422916693619, lon = 26.66829512680357, type = AIRCRAFT, validfrom: 1646312461, validuntil: 1646316061
+POST parameters:
+  - lat, lon: Latitude and Longitude of the sighting. Accepts float numbers. (required)
+  - type: The type of the reported sighting, for example VEHICLES or AIRCRAFT. Accepts values enumerated in supportedTypes in settings.js. (required)
+  - validfrom, validuntil: Start and end of the time period when the report is valid in second-UNIX timestamp format. (optional, by default the 1-hour period starting when the request is processed)
 ```
 
 ## Mobile App (React Native)

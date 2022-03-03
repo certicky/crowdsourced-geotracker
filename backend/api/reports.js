@@ -50,25 +50,35 @@ const getReportsInBoundingBox = (request, response) => {
 }
 
 // (POST) Adds a new report to DB.
-// Example: http://localhost:3000/reports   ---   lat: 49.71422916693619, lon: 26.66829512680357, type: AIRCRAFT
+// Example: http://localhost:3000/reports   ---   lat: 49.71422916693619, lon: 26.66829512680357, type: AIRCRAFT, validfrom: 1646312461, validuntil: 1646316061
 const createReport = (request, response) => {
-  const { lat, lon, type } = request.body
+  const { lat, lon, type, validfrom, validuntil } = request.body
   if (!lon || lon.toString() !== parseFloat(lon).toString()) throw new Error('Incorrect input: lon (supported: float)')
   if (!lat || lat.toString() !== parseFloat(lat).toString()) throw new Error('Incorrect input: lat (supported: float)')
   if (!type || !supportedTypes.includes(type)) throw new Error('Incorrect input: type. (supported: ' + supportedTypes.toString() + ')')
+  if (validfrom && validfrom.toString() !== parseInt(validfrom).toString()) throw new Error('Incorrect input: validfrom (supported: int)')
+  if (validuntil && validuntil.toString() !== parseInt(validuntil).toString()) throw new Error('Incorrect input: validuntil (supported: int)')
+
+  const currentTimeStamp = Math.round(Date.now() / 1000)
+  const validFromSQL = parseInt(validfrom) || currentTimeStamp
+  const validUntilSQL = parseInt(validuntil) || (
+      validFromSQL !== currentTimeStamp
+        ? validFromSQL + 3600
+        : currentTimeStamp + 3600
+    )
 
   const query = `
-    INSERT INTO reports (location, type, time)
+    INSERT INTO reports (location, type, valid_from, valid_until)
     VALUES (
       CAST( ST_SetSRID(ST_Point( ` + parseFloat(lon) + `, ` + parseFloat(lat) + `), 4326) AS geography),
       $1,
-      NOW()
+      to_timestamp($2),
+      to_timestamp($3)
     )
-    ON CONFLICT (type, date_trunc('hour', "time"), ST_SnapToGrid(location::geometry, 0.0001)) DO
-    UPDATE SET time = NOW()
+    ON CONFLICT (type, valid_from, valid_until, ST_SnapToGrid(location::geometry, 0.00001)) DO NOTHING
   `
 
-  pool.query(query, [type], (error, results) => {
+  pool.query(query, [type, validFromSQL, validUntilSQL], (error, results) => {
     if (error) {
       console.log(error)
       throw error
