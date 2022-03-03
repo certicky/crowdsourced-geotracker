@@ -76,7 +76,8 @@ const main = async () => {
             validuntil: validityPeriod ? validityPeriod.validuntil : undefined,
             description: getDescriptionFromRec(rec) || undefined,
             mediaurl: rec.properties.media_url || undefined
-          }
+          },
+          ip: '127.0.0.1'
         }, null)
       }
     }

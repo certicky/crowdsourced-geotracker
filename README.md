@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS public.reports
     valid_until timestamptz NOT NULL DEFAULT now() + interval '1 hour',
     description varchar(256),
     media_url varchar(256),
+    ip varchar(64),
     CONSTRAINT reports_pkey PRIMARY KEY (id)
 );
 ALTER TABLE public.reports OWNER to geotracker_user;

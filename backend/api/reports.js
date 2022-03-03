@@ -47,6 +47,7 @@ const getReportsInBoundingBox = (request, response) => {
 // (POST) Adds a new report to DB.
 // Example: http://localhost:3000/reports   ---   lat: 49.71422916693619, lon: 26.66829512680357, type: AIRCRAFT, validfrom: 1646312461, validuntil: 1646316061
 const createReport = (request, response) => {
+  const requestIP = request.ip
   const { lat, lon, type, validfrom, validuntil, description, mediaurl } = request.body
   if (!lon || lon.toString() !== parseFloat(lon).toString()) throw new Error('Incorrect input: lon (supported: float)')
   if (!lat || lat.toString() !== parseFloat(lat).toString()) throw new Error('Incorrect input: lat (supported: float)')
@@ -63,19 +64,20 @@ const createReport = (request, response) => {
     )
 
   const query = `
-    INSERT INTO reports (location, type, valid_from, valid_until, description, media_url)
+    INSERT INTO reports (location, type, valid_from, valid_until, description, media_url, ip)
     VALUES (
       CAST( ST_SetSRID(ST_Point( ` + parseFloat(lon) + `, ` + parseFloat(lat) + `), 4326) AS geography),
       $1,
       to_timestamp($2),
       to_timestamp($3),
       $4,
-      $5
+      $5,
+      $6
     )
     ON CONFLICT (type, valid_from, valid_until, ST_SnapToGrid(location::geometry, 0.00001)) DO NOTHING
   `
 
-  pool.query(query, [type, validFromSQL, validUntilSQL, description, mediaurl], (error, results) => {
+  pool.query(query, [type, validFromSQL, validUntilSQL, description, mediaurl, requestIP], (error, results) => {
     if (error) {
       console.log(error)
       throw error
