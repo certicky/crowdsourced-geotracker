@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS public.reports
     type character varying(32) COLLATE pg_catalog."default",
     valid_from timestamptz NOT NULL DEFAULT now(),
     valid_until timestamptz NOT NULL DEFAULT now() + interval '1 hour',
+    description varchar(256),
     img_thumb varchar(256),
     img_full varchar(256),
     CONSTRAINT reports_pkey PRIMARY KEY (id)
@@ -75,6 +76,7 @@ POST parameters:
   - lat, lon: Latitude and Longitude of the sighting. Accepts float numbers. (required)
   - type: The type of the reported sighting, for example VEHICLES or AIRCRAFT. Accepts values enumerated in supportedTypes in settings.js. (required)
   - validfrom, validuntil: Start and end of the time period when the report is valid in second-UNIX timestamp format. (optional, by default the 1-hour period starting when the request is processed)
+  - description: Short textual description fo the sighting. (optional)
 ```
 
 ## Mobile App (React Native)

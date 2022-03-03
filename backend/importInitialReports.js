@@ -45,8 +45,15 @@ const main = async () => {
       const m = moment(dateLine.toLowerCase().replace('date: ', ''), 'DD/MM/YYYY')
       return {
         validfrom: m.clone().startOf('day').format('X'),
-        validuntil: m.clone().endOf('day').format('X')
+        validuntil: m.clone().endOf('day').add(1, 'day').format('X')
       }
+    }
+  }
+
+  const getDescriptionFromRec = (rec) => {
+    const descLine = rec.properties.description.split("\n").find(l => l.includes('BRIEF DESCRIPTION: '))
+    if (descLine) {
+      return descLine.replace('BRIEF DESCRIPTION: ','')
     }
   }
 
@@ -58,6 +65,7 @@ const main = async () => {
         console.log(getTypeFromRec(rec))
         console.log(rec.geometry.coordinates)
         console.log(validityPeriod)
+        console.log(getDescriptionFromRec(rec))
 
         reports.createReport({
           body: {
@@ -65,7 +73,8 @@ const main = async () => {
             lon: rec.geometry.coordinates[0],
             type: getTypeFromRec(rec),
             validfrom: validityPeriod ? validityPeriod.validfrom : undefined,
-            validuntil: validityPeriod ? validityPeriod.validuntil : undefined
+            validuntil: validityPeriod ? validityPeriod.validuntil : undefined,
+            description: getDescriptionFromRec(rec) || undefined
           }
         }, null)
       }
