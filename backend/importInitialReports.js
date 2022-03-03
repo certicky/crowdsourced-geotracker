@@ -1,5 +1,6 @@
 const fetch = require('node-fetch')
 const reports = require('./api/reports')
+const moment = require('moment')
 
 const main = async () => {
   const res = await fetch('https://maphub.net/json/map_load/176607', {
@@ -38,18 +39,33 @@ const main = async () => {
     return 'INFANTRY'
   }
 
+  const getValidityPeriodFromRec = (rec) => {
+    const dateLine = rec.properties.description.split("\n").find(l => l.toLowerCase().includes('date: '))
+    if (dateLine) {
+      const m = moment(dateLine.toLowerCase().replace('date: ', ''), 'DD/MM/YYYY')
+      return {
+        validfrom: m.clone().startOf('day').format('X'),
+        validuntil: m.clone().endOf('day').format('X')
+      }
+    }
+  }
+
   data.geojson.features.forEach(rec => {
     if (rec.geometry && rec.geometry.type === 'Point' && importedGroupIds.includes(rec.properties.group)) {
       if (rec.properties.title.toLowerCase().includes('russian')) {
+        const validityPeriod = getValidityPeriodFromRec(rec)
         console.log('==============')
         console.log(getTypeFromRec(rec))
         console.log(rec.geometry.coordinates)
+        console.log(validityPeriod)
 
         reports.createReport({
           body: {
             lat: rec.geometry.coordinates[1],
             lon: rec.geometry.coordinates[0],
-            type: getTypeFromRec(rec)
+            type: getTypeFromRec(rec),
+            validfrom: validityPeriod ? validityPeriod.validfrom : undefined,
+            validuntil: validityPeriod ? validityPeriod.validuntil : undefined
           }
         }, null)
       }

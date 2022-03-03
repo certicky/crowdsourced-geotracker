@@ -6,7 +6,7 @@ const {
   dbHost,
   supportedTypes
 } = require('../settings')
-
+const moment = require('moment')
 const { Pool } = require('pg')
 
 const pool = new Pool({
@@ -59,7 +59,7 @@ const createReport = (request, response) => {
   if (validfrom && validfrom.toString() !== parseInt(validfrom).toString()) throw new Error('Incorrect input: validfrom (supported: int)')
   if (validuntil && validuntil.toString() !== parseInt(validuntil).toString()) throw new Error('Incorrect input: validuntil (supported: int)')
 
-  const currentTimeStamp = Math.round(Date.now() / 1000)
+  const currentTimeStamp = moment().format('X')
   const validFromSQL = parseInt(validfrom) || currentTimeStamp
   const validUntilSQL = parseInt(validuntil) || (
       validFromSQL !== currentTimeStamp
