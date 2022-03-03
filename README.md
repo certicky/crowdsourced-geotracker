@@ -78,6 +78,19 @@ POST parameters:
   - media_url: Url to an image of a Tweet that's displayed next to the report. (optional)
 ```
 
+## Web Frontend (basic HTML with a bit of JS)
+
+### Installation
+* Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
+* Navigate to folder frontend-web: `cd crowdsourced-geotracker/frontend-web`
+* Copy the `settings.js.example` file to `settings.js` and update the values in it. You need to point it to your running backend and provide your Google Maps API key.
+* Then just open `index.html` in your web browser.
+
+Functions:
+* The web displays a map of recent reports in the area. The default area displayed is set according to browser's location.
+* (under construction) It will be possible to rewind the time back using a slider to see how the report locations changed over time.
+* (under construction) We'll also allow users to report sightings via this web frontend too, not only the mobile app.
+
 ## Mobile App (React Native)
 
 ### Installation
@@ -100,15 +113,4 @@ The app is under construction. Some planned functions and notes:
 * If possible, the device's geolocation should only be enabled while sending the report. If it was disabled before reporting, it should auto-disable after the report is sent.
 * When users aren't reporting a sighting, the app should display a map of recent reports around them.
 
-## Web Frontend (basic HTML with a bit of JS)
 
-### Installation
-* Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
-* Navigate to folder frontend-web: `cd crowdsourced-geotracker/frontend-web`
-* Copy the `settings.js.example` file to `settings.js` and update the values in it. You need to point it to your running backend and provide your Google Maps API key.
-* Then just open `index.html` in your web browser.
-
-Functions:
-* The web displays a map of recent reports in the area. The default area displayed is set according to browser's location.
-* (under construction) It will be possible to rewind the time back using a slider to see how the report locations changed over time.
-* (under construction) We'll also allow users to report sightings via this web frontend too, not only the mobile app.
