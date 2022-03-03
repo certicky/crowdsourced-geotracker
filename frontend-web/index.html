@@ -13,6 +13,7 @@
       let dbRequestTimeout = null
       let map = null
       let displayedTime = Math.round(Date.now() / 1000)
+      const isMobileDevice = (screen.width < 800)
 
       // call any GET request
       function requestAPIGet (uri, params, callback) {
@@ -95,7 +96,7 @@
       function initMap () {
         // create the map
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 7,
+          zoom: isMobileDevice ? 14 : 7,
           center: { lat: 50.41311166314775, lng: 30.46506531920826 }
         })
 
