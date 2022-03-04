@@ -20,20 +20,20 @@ The project can be configured to track all kinds of things - here are a few exam
 ### Installation
 
 1. Install Node.JS and npm (on Ubuntu/Debian run `sudo apt install nodejs npm`)
-2. Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
+2. Clone this repository: `git clone https://github.com/certicky/crowdsourced-geotracker.git`
 3. Navigate to folder backend: `cd crowdsourced-geotracker/backend`
 4. Install the dependencies: `npm install`
 5. Install Postgres and Postgis extension (depending on your OS)
 6. Create a DB user, database and tables using the following commands (don't forget to change the credentials and create indexes):
 
 ```
-CREATE USER geotracker_user WITH PASSWORD <YOUR DB PASSWORD>;
+CREATE USER geotracker_user WITH PASSWORD '<YOUR DB PASSWORD>';
 CREATE DATABASE geotracker_db OWNER geotracker_user;
 CREATE EXTENSION postgis;
 ```
 
 ```
-CREATE TABLE IF NOT EXISTS public.reports
+CREATE TABLE public.reports
 (
     id SERIAL,
     location geography(Point,4326),
@@ -88,7 +88,7 @@ POST parameters:
 ## Web Frontend (basic HTML with a bit of JS)
 
 ### Installation
-* Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
+* Clone this repository: `git clone https://github.com/certicky/crowdsourced-geotracker.git`
 * Navigate to folder frontend-web: `cd crowdsourced-geotracker/frontend-web`
 * Copy the `settings.js.example` file to `settings.js` and update the values in it. You need to point it to your running backend and provide your Google Maps API key.
 * Then just open `index.html` in your web browser.
@@ -102,7 +102,7 @@ Functions:
 
 ### Installation
 * Set up your Android development environment, if haven’t done so. Make sure you can successfully run an Android app on an emulator.
-* Clone this repository: `git clone git@github.com:certicky/crowdsourced-geotracker.git`
+* Clone this repository: `git clone https://github.com/certicky/crowdsourced-geotracker.git`
 * Navigate to folder frontend-mobile: `cd crowdsourced-geotracker/frontend-mobile`
 * Install the dependencies: `npm install`
 * Install the react-native-cli globally: `npm install -g react-native-cli`
