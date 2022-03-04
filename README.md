@@ -58,6 +58,12 @@ CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_un
 
 ### API
 
+* **[GET] /metadata**
+```
+Returns all the meta data / settings that might be required by frontends.
+Example: http://localhost:3000/metadata
+```
+
 * **[GET] /reports**
 ```
 Returns all the reports from the specified bounding box.
