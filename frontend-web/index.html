@@ -15,6 +15,8 @@
       const isMobileDevice = (screen.width <= 768)
       const isDarkMode = (isMobileDevice && (moment().format('HH') >= 18 || moment().format('HH') <= 7))
       let markers = {}
+      let addReportMarker = null
+      let addReportTooltip = null
       let dbRequestTimeout = null
       let map = null
       let displayedTime = moment().format('X')
@@ -59,6 +61,11 @@
         if (url.includes('?')) urlAdjusted = url.split('?')[0]
         const parts = urlAdjusted.split('/')
         return parts[parts.length - 1]
+      }
+
+      function closeAddReportInterface () {
+        if (addReportTooltip) addReportTooltip.close()
+        if (addReportMarker) { addReportMarker.setMap(null); addReportMarker = null }
       }
 
       // load reports from API, using current map's bounds
@@ -172,6 +179,25 @@
             window.clearTimeout(dbRequestTimeout)
           }
           dbRequestTimeout = window.setTimeout(loadReportsFromAPI, 1000)
+        })
+
+        // listen for map click and create marker + open tooltip
+        google.maps.event.addListener(map, 'click', (e) => {
+          closeAddReportInterface()
+          addReportMarker = new google.maps.Marker({
+            position: e.latLng,
+            map: map,
+            icon: './res/redcircle.png'
+          })
+          addReportTooltip = new google.maps.InfoWindow({
+            content: 'adding report'
+          })
+          addReportTooltip.open({
+            anchor: addReportMarker,
+            map,
+            shouldFocus: true
+          })
+          google.maps.event.addListener(addReportTooltip, 'closeclick', (e) => { closeAddReportInterface() })
         })
       }
 
