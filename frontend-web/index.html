@@ -137,7 +137,7 @@
         // create the map
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: isMobileDevice ? 14 : 7,
-          center: { lat: 50.41311166314775, lng: 30.46506531920826 },
+          center: settings.mapDefaultLocation,
           mapTypeId: 'roadmap',
           controlSize: 80,
           styles: isDarkMode ? stylesNightMode : undefined
@@ -148,8 +148,15 @@
           navigator.geolocation.getCurrentPosition(function (position) {
             var latitude = position.coords.latitude
             var longitude = position.coords.longitude
-            var coords = new google.maps.LatLng(latitude, longitude)
-            map.setCenter(coords)
+            // only center on users location if it's within the bounding box
+            // defined in settings.mapCenterOnUsersLocationInBounds. otherwise,
+            // remain in the default map location
+            if (latitude >= settings.mapCenterOnUsersLocationInBounds.latmin && latitude <= settings.mapCenterOnUsersLocationInBounds.latmax && longitude >= settings.mapCenterOnUsersLocationInBounds.lngmin && longitude <= settings.mapCenterOnUsersLocationInBounds.lngmin) {
+              var coords = new google.maps.LatLng(latitude, longitude)
+              map.setCenter(coords)
+            } else {
+              console.log('Current location(' + latitude + ',' + longitude +') is outside the bounding box where auto-centering is enabled. Keeping map at a default coordinates.')
+            }
           })
         }
 

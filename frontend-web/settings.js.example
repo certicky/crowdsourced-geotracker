@@ -1,4 +1,14 @@
 const settings = {
   backendUrl: 'http://127.0.0.1:3000',
-  googleMapsAPIKey: 'YOUR_GOOGLE_API_KEY'
+  googleMapsAPIKey: 'YOUR_GOOGLE_API_KEY',
+  mapDefaultLocation: {
+    lat: 50.41311166314775,
+    lng: 30.46506531920826
+  },
+  mapCenterOnUsersLocationInBounds: {
+    latmin: 44.12810823870789,
+    lngmin: 21.30785244768581,
+    latmax: 51.92494910764881,
+    lngmax: 39.789226501012976
+  }
 }
