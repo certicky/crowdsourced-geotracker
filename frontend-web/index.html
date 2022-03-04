@@ -18,6 +18,7 @@
       let addReportMarker = null
       let addReportTooltip = null
       let dbRequestTimeout = null
+      let projectMetadata = {}
       let map = null
       let displayedTime = moment().format('X')
 
@@ -189,8 +190,21 @@
             map: map,
             icon: './res/redcircle.png'
           })
+
+          // prepare the tooltip content
+          let content = '<h3>Adding a report:</h3>'
+          content += '<div id="report-add-form-coords">' + (Math.round(e.latLng.lat() * 1000) / 1000) + ', ' + Math.round(e.latLng.lng() * 1000) / 1000 + '</div>'
+          content += '<form id="report-add-form">'
+          content += '<select name="report-add-type" id="report-add-type">'
+          if (projectMetadata.supportedTypes) projectMetadata.supportedTypes.forEach(t => {
+            content += '<option value="' + t + '">' + t + '</option>'
+          })
+          content += '</select>'
+          content += '<button type="button" onClick="sendNewReport()">Send</button>'
+          content += '</form>'
+
           addReportTooltip = new google.maps.InfoWindow({
-            content: 'adding report'
+            content
           })
           addReportTooltip.open({
             anchor: addReportMarker,
@@ -201,11 +215,18 @@
         })
       }
 
+      // load project's metadata
+      requestAPIGet ('/metadata', null, (response) => {
+        if (response) projectMetadata = JSON.parse(response)
+      })
+
       // load Google Maps
       var script = document.createElement('script')
       script.src = 'https://maps.googleapis.com/maps/api/js?key=' + settings.googleMapsAPIKey + '&callback=init'
       script.async = true
       document.head.appendChild(script)
+
+
     </script>
   </body>
 </html>

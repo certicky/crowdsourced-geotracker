@@ -29,3 +29,6 @@ html, body {
   max-height: 400px;
 }
 
+#report-add-form-coords {
+  margin-bottom: 0.5rem;
+}
