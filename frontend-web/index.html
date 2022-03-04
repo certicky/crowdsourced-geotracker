@@ -151,9 +151,15 @@
             // only center on users location if it's within the bounding box
             // defined in settings.mapCenterOnUsersLocationInBounds. otherwise,
             // remain in the default map location
-            if (latitude >= settings.mapCenterOnUsersLocationInBounds.latmin && latitude <= settings.mapCenterOnUsersLocationInBounds.latmax && longitude >= settings.mapCenterOnUsersLocationInBounds.lngmin && longitude <= settings.mapCenterOnUsersLocationInBounds.lngmin) {
+            if (latitude >= settings.mapCenterOnUsersLocationInBounds.latmin && latitude <= settings.mapCenterOnUsersLocationInBounds.latmax && longitude >= settings.mapCenterOnUsersLocationInBounds.lngmin && longitude <= settings.mapCenterOnUsersLocationInBounds.lngmax) {
               var coords = new google.maps.LatLng(latitude, longitude)
               map.setCenter(coords)
+              new google.maps.Marker({
+                position: coords,
+                map: map,
+                icon: './res/bluecircle.png',
+                title: 'My Location'
+              })
             } else {
               console.log('Current location(' + latitude + ',' + longitude +') is outside the bounding box where auto-centering is enabled. Keeping map at a default coordinates.')
             }
