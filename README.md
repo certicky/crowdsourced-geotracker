@@ -54,7 +54,8 @@ CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_un
 
 7. Copy the `settings.js.example` file to `settings.js` and update the values in it.
 8. Insert some initial data from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>: `node importInitialReports.js`
-9. Run the backend: `npm run listen`
+9. Run the backend: `npm run listen` or simply `node index.js`
+10. The backend also serves the web frontend, so you can just open `http://localhost:3000/` in a browser to see the map (assuming that you use port 3000 in your `settings.js`).
 
 ### API
 
@@ -92,11 +93,12 @@ POST parameters:
 * Navigate to folder frontend-web: `cd crowdsourced-geotracker/frontend-web`
 * Copy the `settings.js.example` file to `settings.js` and update the values in it. You need to point it to your running backend and provide your Google Maps API key.
 * Then just open `index.html` in your web browser.
+* Alternatively, if you have the backend running locally, you can access it at `http://localhost:3000/` (assuming you're using port 3000 in your backend's `settings.js`).
 
 Functions:
 * The web displays a map of recent reports in the area. The default area displayed is set according to browser's location.
+* Users can report sightings via this web frontend by clicking anywhere on the map.
 * (under construction) It will be possible to rewind the time back using a slider to see how the report locations changed over time.
-* (under construction) We'll also allow users to report sightings via this web frontend too, not only the mobile app.
 
 ## Mobile App (React Native)
 

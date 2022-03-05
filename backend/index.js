@@ -14,13 +14,13 @@ app.use(
   })
 )
 
-app.get('/', (request, response) => {
-  response.json({ info: 'Node.js, Express, and Postgres API' })
-})
-
+// connect API endpoints
 app.get('/metadata', metadata.getMetadata)
 app.get('/reports', reports.getReportsInBoundingBox)
 app.post('/reports', reports.createReport)
+
+// serve static files
+app.use(express.static('../frontend-web'))
 
 app.listen(listenPort, () => {
   console.log(`App running on port ${listenPort}.`)
