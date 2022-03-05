@@ -24,15 +24,12 @@ The project can be configured to track all kinds of things - here are a few exam
 3. Navigate to folder backend: `cd crowdsourced-geotracker/backend`
 4. Install the dependencies: `npm install`
 5. Install Postgres and Postgis extension (depending on your OS)
-6. Create a DB user, database and tables using the following commands (don't forget to change the credentials and create indexes):
+6. Create a DB user, database and tables using the following commands (don't forget to replace `<YOUR DB PASSWORD>` with the actual password):
 
 ```
 CREATE USER geotracker_user WITH PASSWORD '<YOUR DB PASSWORD>';
 CREATE DATABASE geotracker_db OWNER geotracker_user;
 CREATE EXTENSION postgis;
-```
-
-```
 CREATE TABLE public.reports
 (
     id SERIAL,
@@ -53,7 +50,7 @@ CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_un
 ```
 
 7. Copy the `settings.js.example` file to `settings.js` and update the values in it.
-8. Insert some initial data from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>: `node importInitialReports.js`
+8. Insert some reports from external data sources from by calling `node importExternalData.js`. This script can be called periodically using cron if you want to always have fresh external data in the DB. At the moment, it only fetches some reports from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>
 9. Run the backend: `npm run listen` or simply `node index.js`
 10. The backend also serves the web frontend, so you can just open `http://localhost:3000/` in a browser to see the map (assuming that you use port 3000 in your `settings.js`).
 
