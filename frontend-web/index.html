@@ -8,9 +8,15 @@
     <link rel="icon" type="image/x-icon" href="/res/favicon.png">
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <title>Crowdsourced GeoTracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="map"></div>
+    <div id="controls"></div>
+    <div id="about"></div>
 
     <script type="text/javascript">
       const isMobileDevice = (screen.width <= 768)
@@ -112,7 +118,6 @@
           time: displayedTime
         }, (response) => {
           const locations = JSON.parse(response)
-          console.log('locations from API', displayedTime, locations)
           if (locations && locations.length) {
             locations.forEach(loc => {
               if (!markers[loc.id]) {
@@ -189,7 +194,7 @@
           zoom: isMobileDevice ? 14 : 7,
           center: settings.mapDefaultLocation,
           mapTypeId: 'roadmap',
-          controlSize: 80,
+          controlSize: isMobileDevice ? 80 : undefined,
           styles: isDarkMode ? stylesNightMode : undefined
         })
 
@@ -281,6 +286,17 @@
       script.src = 'https://maps.googleapis.com/maps/api/js?key=' + settings.googleMapsAPIKey + '&callback=init'
       script.async = true
       document.head.appendChild(script)
+
+      // set the title according to settings
+      if (settings.title && settings.title !== '') document.title = settings.title
+
+      // set the about text according to settings
+      const aboutEl = document.querySelector('#about')
+      if (settings.aboutText && settings.aboutText !== '') {
+        if (aboutEl) aboutEl.innerHTML = settings.aboutText
+      } else {
+        if (aboutEl) aboutEl.remove()
+      }
     </script>
   </body>
 </html>
