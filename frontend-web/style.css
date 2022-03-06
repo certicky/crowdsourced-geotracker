@@ -80,11 +80,38 @@ label {
   padding: 0.5rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   overflow-y: auto;
 }
 
 #about img {
   max-height: 5rem;
+}
+
+#controls {
+  position: absolute;
+  height: 10rem;
+  bottom: 1rem;
+  left: calc(60% - 100px + 3rem);
+  background-color: white;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  align-items: center;
+}
+
+#controls .controls-row {
+  display: flex;
+  align-items: center;
+}
+
+#controls .controls-row>div {
+  width: 3.8rem;
+  text-align: center;
+}
+
+#controls button {
+  margin: 0.25rem;
+  font-weight: bold;
 }
 
 /* MOBILE DEVICES / SMALL SCREENS  */
@@ -99,5 +126,25 @@ label {
 
   #about {
     display: block;
+    width: 40%;
+    left: 0.5rem;
+    bottom: 0.5rem;
+  }
+
+  #controls {
+    left: unset;
+    right: 0.5rem;
+    font-size: 0.8rem;
+    max-width: 45%;
+    bottom: 0.5rem;
+    height: auto;
+  }
+
+  #controls button {
+    font-size: 0.8rem;
+  }
+
+  #controls .controls-row>div {
+    width: 2rem;
   }
 }

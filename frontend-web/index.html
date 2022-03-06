@@ -15,8 +15,19 @@
   </head>
   <body>
     <div id="map"></div>
-    <div id="controls"></div>
     <div id="about"></div>
+    <div id="controls">
+      <div class="controls-row">
+        <button onclick="decrementHour(24)">&lang;&lang; -1 day</button>
+        <div id="controls-date">-</div>
+        <button onclick="incrementHour(24)">+1 day &rang;&rang;</button>
+      </div>
+      <div class="controls-row">
+        <button onclick="decrementHour(1)">&lang; -1 hour</button>
+        <div id="controls-time">-</div>
+        <button onclick="incrementHour(1)">+1 hour &rang;</button>
+      </div>
+    </div>
 
     <script type="text/javascript">
       const isMobileDevice = (screen.width <= 768)
@@ -46,7 +57,6 @@
           if (callback && this.response) callback(this.response)
         })
         oReq.open('POST', settings.backendUrl + uri)
-        //oReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
         oReq.send(formData)
       }
 
@@ -66,14 +76,21 @@
         markers = {}
         displayedTime = parseInt(newTime)
         loadReportsFromAPI()
+
+        const ctrlDateEl = document.querySelector('#controls-date')
+        const ctrlTimeEl = document.querySelector('#controls-time')
+        ctrlDateEl.innerHTML = moment(parseInt(newTime), 'X').format('D. MMM.')
+        ctrlTimeEl.innerHTML = moment(parseInt(newTime), 'X').format('HH:mm')
       }
 
-      function decrementHour () {
-        setDisplayedTime(displayedTime - 3600)
+      function decrementHour (n = 1) {
+        setDisplayedTime(displayedTime - (n * 3600))
       }
 
-      function incrementHour () {
-        setDisplayedTime(displayedTime + 3600)
+      function incrementHour (n = 1) {
+        if (displayedTime + (n * 3600) <= moment().format('X')) {
+          setDisplayedTime(displayedTime + (n * 3600))
+        }
       }
 
       function getTweetIdFromUrl (url) {
@@ -195,7 +212,13 @@
           center: settings.mapDefaultLocation,
           mapTypeId: 'roadmap',
           controlSize: isMobileDevice ? 80 : undefined,
-          styles: isDarkMode ? stylesNightMode : undefined
+          styles: isDarkMode ? stylesNightMode : undefined,
+          zoomControl: true,
+          zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_TOP
+          },
+          fullscreenControl: false,
+          streetViewControl: false
         })
 
         // try to center the map on current location
@@ -274,6 +297,10 @@
           })
           google.maps.event.addListener(addReportTooltip, 'closeclick', (e) => { closeAddReportInterface() })
         })
+
+        setTimeout(() => {
+          setDisplayedTime(parseInt(moment().format('X')))
+        }, 1000)
       }
 
       // load project's metadata
