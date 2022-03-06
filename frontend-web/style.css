@@ -80,6 +80,7 @@ label {
   padding: 0.5rem;
   display: flex;
   align-items: center;
+  overflow-y: auto;
 }
 
 #about img {
@@ -94,5 +95,9 @@ label {
 
   .gm-style .gm-style-iw {
     font-size: 40px;
+  }
+
+  #about {
+    display: block;
   }
 }

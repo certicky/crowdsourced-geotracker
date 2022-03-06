@@ -22,6 +22,6 @@ const settings = {
       </ul>
       <div style="font-size: 0.9rem">This is an open-source project. Anyone can get it <a href="https://github.com/certicky/crowdsourced-geotracker" target="_blank">from GitHub</a> and deploy their own copy in minutes.</div>
     </div>
-    <div><a href="https://github.com/certicky/crowdsourced-geotracker" target="_blank"><img src="res/github.png" title="View on GitHub" /></a></div>
+    <div style="padding-top: 1rem"><a href="https://github.com/certicky/crowdsourced-geotracker" target="_blank"><img src="res/github.png" title="View on GitHub" /></a></div>
   `
 }
