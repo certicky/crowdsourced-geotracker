@@ -34,14 +34,14 @@
       }
 
       // Call any POST request
-      function requestAPIPost (uri, params, callback) {
+      function requestAPIPost (uri, formData, callback) {
         var oReq = new XMLHttpRequest()
         oReq.addEventListener('load', function reqListener () {
           if (callback && this.response) callback(this.response)
         })
         oReq.open('POST', settings.backendUrl + uri)
-        oReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-        oReq.send(Object.keys(params).map(k => k + '=' + params[k]).join('&'))
+        //oReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        oReq.send(formData)
       }
 
       // Assigns a marker color based on report type
@@ -86,9 +86,7 @@
       // Adds a new report using the API's POST /reports endpoint
       function addNewReport () {
         const formData = new FormData(document.querySelector('.report-add-form'))
-        var objectObj = {}
-        formData.forEach((value, key) => objectObj[key] = value)
-        requestAPIPost('/reports', objectObj, () => {
+        requestAPIPost('/reports', formData, () => {
           if (addReportTooltip) {
             addReportTooltip.setContent('<h2>Thank you!</h2><div>Your report has been added.</div>')
             setTimeout(() => {

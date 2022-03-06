@@ -7,6 +7,7 @@ const {
   supportedTypes
 } = require('../settings')
 const moment = require('moment')
+const path = require('path')
 const { Pool } = require('pg')
 
 const pool = new Pool({
@@ -16,6 +17,16 @@ const pool = new Pool({
   port: dbPort,
   host: dbHost
 })
+
+function getRandomFilename(ext) {
+    var result           = ''
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var charactersLength = characters.length
+    for ( var i = 0; i < 24; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+   }
+   return result + ext.toLowerCase()
+}
 
 // (GET) Returns all the reports from the specified bounding box.
 // Example: http://localhost:3000/reports?latmin=46.278977050642126&lonmin=25.19668223803358&latmax=51.515386508021386&lonmax=41.30651925297246&img=THUMBNAIL&time=1646312461
@@ -49,6 +60,8 @@ const getReportsInBoundingBox = (request, response) => {
 const createReport = (request, response) => {
   const requestIP = request.ip
   const { lat, lon, type, validfrom, validuntil, description, mediaurl } = request.body
+  console.log('request.files',request.files)
+
   if (!lon || lon.toString() !== parseFloat(lon).toString()) throw new Error('Incorrect input: lon (supported: float)')
   if (!lat || lat.toString() !== parseFloat(lat).toString()) throw new Error('Incorrect input: lat (supported: float)')
   if (!type || !supportedTypes.includes(type)) throw new Error('Incorrect input: type. (supported: ' + supportedTypes.toString() + ')')
@@ -62,6 +75,11 @@ const createReport = (request, response) => {
         ? validFromSQL + 3600
         : currentTimeStamp + 3600
     )
+
+  if (request.files && request.files.mediafile) {
+    const randomFileName = getRandomFilename(path.extname(request.files.mediafile.name))
+    request.files.mediafile.mv('./file_uploads/' + randomFileName)
+  }
 
   const query = `
     INSERT INTO reports (location, type, valid_from, valid_until, description, media_url, ip)
