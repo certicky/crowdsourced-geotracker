@@ -28,14 +28,32 @@ const main = async () => {
   console.log('importedGroupIds', importedGroupIds)
 
   const getTypeFromRec = (rec) => {
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('tank')) return 'VEHICLES'
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('apc')) return 'VEHICLES'
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('buk')) return 'VEHICLES'
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('convoy')) return 'VEHICLES'
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('tigr')) return 'VEHICLES'
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('jets')) return 'AIRCRAFT'
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('plane')) return 'AIRCRAFT'
-    if (rec.properties && rec.properties.title && rec.properties.title.toLowerCase().includes('helicop')) return 'AIRCRAFT'
+    if (rec.properties && (rec.properties.title || rec.properties.description)) {
+      // VEHICLES
+      if ([
+        'tank',
+        'convoy',
+        'apc',
+        'mrl',
+        'bmp-3',
+        'vdv',
+        'bmd-2',
+        'kamaz',
+        'apc',
+        'tigr',
+        'thermobaric',
+        'mlrs',
+        'buk',
+        'armor'
+      ].some(str => rec.properties.title.toLowerCase().includes(str) || rec.properties.description.toLowerCase().includes(str))) return 'VEHICLES'
+      // AIRCRAFT
+      if ([
+        'jets',
+        'helicop',
+        'plane'
+      ].some(str => rec.properties.title.toLowerCase().includes(str) || rec.properties.description.toLowerCase().includes(str))) return 'AIRCRAFT'
+    }
+    // INFANTRY (default)
     return 'INFANTRY'
   }
 
@@ -59,7 +77,8 @@ const main = async () => {
 
   data.geojson.features.forEach(rec => {
     if (rec.geometry && rec.geometry.type === 'Point' && importedGroupIds.includes(rec.properties.group)) {
-      if (rec.properties.title.toLowerCase().includes('russian')) {
+      const isRelevant = ['russia', 'military'].some(str => rec.properties.title.toLowerCase().includes(str) || rec.properties.description.toLowerCase().includes(str)) || ['VEHICLES', 'AIRCRAFT'].includes(getTypeFromRec(rec))
+      if (isRelevant) {
         const validityPeriod = getValidityPeriodFromRec(rec)
         console.log('==============')
         console.log(getTypeFromRec(rec))
