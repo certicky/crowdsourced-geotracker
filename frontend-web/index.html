@@ -135,11 +135,14 @@
                   }
                 })
                 markers[loc.id].markerObject.addListener('click', function (p) {
+                  // content for the 'Add Report' tooltip
                   let content = ''
                   if (loc.description) content += '<div class="marker-tt-description">' + loc.description + '</div>'
                   if (loc.type) content += '<div class="marker-tt-type">' + loc.type + '</div>'
                   if (loc.lat && loc.lon) content += '<div class="marker-tt-location">' + loc.lat + ', ' + loc.lon + '</div>'
                   if (loc.type) content += '<div class="marker-tt-valid-from">' + moment(loc.valid_from).format('D. MMM. YYYY HH:mm') + '</div>'
+
+                  // media: Twitter link
                   if (loc.media_url && loc.media_url.includes('twitter.com')) {
                     content += '<div id="tweet-container-' + loc.id + '" class="marker-tt-tweet"></div>'
                     setTimeout(() => {
@@ -153,6 +156,17 @@
                       )
                     }, 500)
                   }
+
+                  // media: uploaded photos
+                  if (loc.media_url && loc.media_url.includes('./file_uploads/')) {
+                    content += '<a class="marker-tt-photo" href="' + settings.backendUrl + loc.media_url.replace('./file_uploads/', '/') + '" target="_blank"><img src="' + settings.backendUrl + loc.media_url.replace('./file_uploads/', '/') + '" /></a>'
+                  }
+
+                  // close other tooltips before opening this one
+                  if (addReportTooltip) addReportTooltip.close()
+                  Object.values(markers).forEach(m => {
+                    if (m.markerTooltip) m.markerTooltip.close()
+                  })
 
                   markers[loc.id].markerTooltip = new google.maps.InfoWindow({
                     content
@@ -240,6 +254,11 @@
           content += '<button type="button" onclick="addNewReport()">Send</button>'
           content += '</form>'
 
+          // close other tooltips before opening this one
+          Object.values(markers).forEach(m => {
+            if (m.markerTooltip) m.markerTooltip.close()
+          })
+
           addReportTooltip = new google.maps.InfoWindow({
             content
           })
@@ -262,8 +281,6 @@
       script.src = 'https://maps.googleapis.com/maps/api/js?key=' + settings.googleMapsAPIKey + '&callback=init'
       script.async = true
       document.head.appendChild(script)
-
-
     </script>
   </body>
 </html>

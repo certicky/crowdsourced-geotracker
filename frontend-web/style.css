@@ -53,6 +53,15 @@ label {
   max-height: 400px;
 }
 
+.marker-tt-photo {
+  display: block;
+  cursor: pointer;
+}
+
+.marker-tt-photo img {
+  width: 100%;
+}
+
 .report-add-form select,
 .report-add-form input,
 .report-add-form button {
