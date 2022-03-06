@@ -4,10 +4,12 @@ const {
   dbPassword,
   dbPort,
   dbHost,
-  supportedTypes
+  supportedTypes,
+  maximumImageUploadSizeMB
 } = require('../settings')
 const moment = require('moment')
-const path = require('path')
+const sharp = require('sharp');
+const fs = require('fs')
 const { Pool } = require('pg')
 
 const pool = new Pool({
@@ -18,14 +20,14 @@ const pool = new Pool({
   host: dbHost
 })
 
-function getRandomFilename(ext) {
+function getRandomFilename() {
     var result           = ''
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     var charactersLength = characters.length
     for ( var i = 0; i < 24; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength))
    }
-   return result + ext.toLowerCase()
+   return result + '.png'
 }
 
 // (GET) Returns all the reports from the specified bounding box.
@@ -57,17 +59,18 @@ const getReportsInBoundingBox = (request, response) => {
 
 // (POST) Adds a new report to DB.
 // Example: http://localhost:3000/reports   ---   lat: 49.71422916693619, lon: 26.66829512680357, type: AIRCRAFT, validfrom: 1646312461, validuntil: 1646316061
-const createReport = (request, response) => {
+const createReport = async (request, response) => {
   const requestIP = request.ip
   const { lat, lon, type, validfrom, validuntil, description, mediaurl } = request.body
-  console.log('request.files',request.files)
 
+  // check the user input
   if (!lon || lon.toString() !== parseFloat(lon).toString()) throw new Error('Incorrect input: lon (supported: float)')
   if (!lat || lat.toString() !== parseFloat(lat).toString()) throw new Error('Incorrect input: lat (supported: float)')
   if (!type || !supportedTypes.includes(type)) throw new Error('Incorrect input: type. (supported: ' + supportedTypes.toString() + ')')
   if (validfrom && validfrom.toString() !== parseInt(validfrom).toString()) throw new Error('Incorrect input: validfrom (supported: int)')
   if (validuntil && validuntil.toString() !== parseInt(validuntil).toString()) throw new Error('Incorrect input: validuntil (supported: int)')
 
+  // compute the validity times
   const currentTimeStamp = parseInt(moment().format('X'))
   const validFromSQL = parseInt(validfrom) || currentTimeStamp
   const validUntilSQL = parseInt(validuntil) || (
@@ -76,11 +79,38 @@ const createReport = (request, response) => {
         : currentTimeStamp + 3600
     )
 
-  if (request.files && request.files.mediafile) {
-    const randomFileName = getRandomFilename(path.extname(request.files.mediafile.name))
-    request.files.mediafile.mv('./file_uploads/' + randomFileName)
+  // process the uploaded image if it exists
+  let mediaUrlSQL = mediaurl
+  if (request.files && request.files.mediafile && request.files.mediafile.size && request.files.mediafile.size <= (1024000 * maximumImageUploadSizeMB)) {
+    const randomFileNameBeforeProcessing = '___' + getRandomFilename()
+    const randomFileNameFinal = getRandomFilename()
+    let fileIsValid = true
+    await request.files.mediafile.mv('./file_uploads/' + randomFileNameBeforeProcessing)
+
+    // process the image using 'sharp' library
+    const f = await sharp('./file_uploads/' + randomFileNameBeforeProcessing)
+
+    // check format, resize, convert to PNG, save using 'sharp' library
+    try {
+      const meta = await f.metadata()
+      if (!['jpeg', 'png', 'webp', 'gif'].includes(meta.format)) fileIsValid = false
+    } catch (e) {
+      fileIsValid = false
+    }
+    if (fileIsValid) {
+      await f.resize(1000, 1000, { fit: sharp.fit.inside, withoutEnlargement: true })
+        .toFormat('png')
+        .toFile('./file_uploads/' + randomFileNameFinal)
+
+      // save its filename to DB
+      mediaUrlSQL = './file_uploads/' + randomFileNameFinal
+    }
+
+    // delete temporary file
+    fs.unlink('./file_uploads/' + randomFileNameBeforeProcessing, () => {})
   }
 
+  // prepare the INSERT query
   const query = `
     INSERT INTO reports (location, type, valid_from, valid_until, description, media_url, ip)
     VALUES (
@@ -95,7 +125,8 @@ const createReport = (request, response) => {
     ON CONFLICT (type, valid_from, valid_until, ST_SnapToGrid(location::geometry, 0.00001)) DO NOTHING
   `
 
-  pool.query(query, [type, validFromSQL, validUntilSQL, description, mediaurl, requestIP], (error, results) => {
+  // execute the INSERT query
+  pool.query(query, [type, validFromSQL, validUntilSQL, description, mediaUrlSQL, requestIP], (error, results) => {
     if (error) {
       console.log(error)
       throw error

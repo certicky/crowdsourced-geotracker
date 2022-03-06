@@ -5,5 +5,6 @@ module.exports = {
   dbPort: 5432,
   dbHost: '127.0.0.1',
   listenPort: 3000,
-  supportedTypes: ['INFANTRY', 'VEHICLES', 'AIRCRAFT']
+  supportedTypes: ['INFANTRY', 'VEHICLES', 'AIRCRAFT'],
+  maximumImageUploadSizeMB: 10
 }

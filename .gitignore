@@ -1,9 +1,6 @@
 backend/settings.js
 frontend-web/settings.js
-
-backend/file_uploads/*.jpg
-backend/file_uploads/*.jpeg
-backend/file_uploads/*.jpng
+backend/file_uploads/*.png
 
 # Logs
 logs
