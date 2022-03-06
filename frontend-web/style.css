@@ -9,6 +9,30 @@ html, body {
   font-size: 16px;
 }
 
+button {
+  background-color: black;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #6495ED;
+}
+
+select {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+label {
+  display: block;
+}
+
 @media only screen and (min-device-width: 1px) and (max-device-width: 768px) {
   html, body {
     font-size: 40px;
@@ -29,6 +53,18 @@ html, body {
   max-height: 400px;
 }
 
-#report-add-form-coords {
-  margin-bottom: 0.5rem;
+.report-add-form select,
+.report-add-form input,
+.report-add-form button {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.report-add-form input[type="text"] {
+  border: solid 1px gray;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  width: calc(100% - 1.5rem);
+  background-color: white;
 }

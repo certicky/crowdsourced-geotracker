@@ -21,9 +21,9 @@
       let dbRequestTimeout = null
       let projectMetadata = {}
       let map = null
-      let displayedTime = moment().format('X')
+      let displayedTime = parseInt(moment().format('X'))
 
-      // call any GET request
+      // Call any GET request
       function requestAPIGet (uri, params, callback) {
         var oReq = new XMLHttpRequest()
         oReq.addEventListener('load', function reqListener () {
@@ -33,6 +33,18 @@
         oReq.send()
       }
 
+      // Call any POST request
+      function requestAPIPost (uri, params, callback) {
+        var oReq = new XMLHttpRequest()
+        oReq.addEventListener('load', function reqListener () {
+          if (callback && this.response) callback(this.response)
+        })
+        oReq.open('POST', settings.backendUrl + uri)
+        oReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        oReq.send(Object.keys(params).map(k => k + '=' + params[k]).join('&'))
+      }
+
+      // Assigns a marker color based on report type
       function getMarkerColorFromType (type) {
         if (type === 'VEHICLES') return 'blue'
         if (type === 'AIRCRAFT') return 'teal'
@@ -40,13 +52,13 @@
       }
 
       function setDisplayedTime (newTime) {
-        if (displayedTime === newTime) return
+        if (parseInt(displayedTime) === parseInt(newTime)) return
         Object.keys(markers).forEach(locId => {
           markers[locId].markerObject.setMap(null)
           markers[locId].markerObject = null
         })
         markers = {}
-        displayedTime = newTime
+        displayedTime = parseInt(newTime)
         loadReportsFromAPI()
       }
 
@@ -65,9 +77,27 @@
         return parts[parts.length - 1]
       }
 
+      // Closes the tooltip for adding new reports
       function closeAddReportInterface () {
         if (addReportTooltip) addReportTooltip.close()
         if (addReportMarker) { addReportMarker.setMap(null); addReportMarker = null }
+      }
+
+      // Adds a new report using the API's POST /reports endpoint
+      function addNewReport () {
+        const formData = new FormData(document.querySelector('.report-add-form'))
+        var objectObj = {}
+        formData.forEach((value, key) => objectObj[key] = value)
+        requestAPIPost('/reports', objectObj, () => {
+          if (addReportTooltip) {
+            addReportTooltip.setContent('<h2>Thank you!</h2><div>Your report has been added.</div>')
+            setTimeout(() => {
+              setDisplayedTime(moment().format('X'))
+              loadReportsFromAPI()
+            }, 3000)
+          }
+        })
+        return false
       }
 
       // load reports from API, using current map's bounds
@@ -81,7 +111,6 @@
           lonmin: sw.lng(),
           latmax: ne.lat(),
           lonmax: ne.lng(),
-          img: 'THUMBNAIL',
           time: displayedTime
         }, (response) => {
           const locations = JSON.parse(response)
@@ -193,15 +222,24 @@
           })
 
           // prepare the tooltip content
-          let content = '<h3>Adding a report:</h3>'
-          content += '<div id="report-add-form-coords">' + (Math.round(e.latLng.lat() * 1000) / 1000) + ', ' + Math.round(e.latLng.lng() * 1000) / 1000 + '</div>'
-          content += '<form id="report-add-form">'
-          content += '<select name="report-add-type" id="report-add-type">'
+          let content = '<h2>Adding a report:</h2>'
+          content += '<form class="report-add-form">'
+          content += '<input type="hidden" name="lat" value="' + e.latLng.lat() + '" />'
+          content += '<input type="hidden" name="lon" value="' + e.latLng.lng() + '" />'
+          content += '<label>What you see: '
+          content += '<select name="type" class="report-add-type">'
           if (projectMetadata.supportedTypes) projectMetadata.supportedTypes.forEach(t => {
             content += '<option value="' + t + '">' + t + '</option>'
           })
           content += '</select>'
-          content += '<button type="button" onClick="sendNewReport()">Send</button>'
+          content += '</label>'
+          content += '<label>Photo (optional): '
+          content += '<input type="file" accept="image/*;capture=camera" name="mediafile"></input>'
+          content += '</label>'
+          content += '<label>Description (optional): '
+          content += '<input type="text" name="description"></input>'
+          content += '</label>'
+          content += '<button type="button" onclick="addNewReport()">Send</button>'
           content += '</form>'
 
           addReportTooltip = new google.maps.InfoWindow({

@@ -55,7 +55,7 @@ const createReport = (request, response) => {
   if (validfrom && validfrom.toString() !== parseInt(validfrom).toString()) throw new Error('Incorrect input: validfrom (supported: int)')
   if (validuntil && validuntil.toString() !== parseInt(validuntil).toString()) throw new Error('Incorrect input: validuntil (supported: int)')
 
-  const currentTimeStamp = moment().format('X')
+  const currentTimeStamp = parseInt(moment().format('X'))
   const validFromSQL = parseInt(validfrom) || currentTimeStamp
   const validUntilSQL = parseInt(validuntil) || (
       validFromSQL !== currentTimeStamp
