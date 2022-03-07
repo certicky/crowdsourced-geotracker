@@ -80,7 +80,8 @@ POST parameters:
   - type: The type of the reported sighting, for example VEHICLES or AIRCRAFT. Accepts values enumerated in supportedTypes in settings.js. (required)
   - validfrom, validuntil: Start and end of the time period when the report is valid in second-UNIX timestamp format. (optional, by default the 1-hour period starting when the request is processed)
   - description: Short textual description fo the sighting. (optional)
-  - media_url: Url to an image of a Tweet that's displayed next to the report. (optional)
+  - mediafile: Image file (jpeg, png or webp) can be attaced to the report here. It will be stored on backend as a static file. (optional)
+  - mediaurl: Url to an external image or a Tweet that's displayed next to the report. (optional)
 ```
 
 ## Web Frontend (basic HTML with a bit of JS)

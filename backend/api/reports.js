@@ -93,7 +93,7 @@ const createReport = async (request, response) => {
     // check format, resize, convert to PNG, save using 'sharp' library
     try {
       const meta = await f.metadata()
-      if (!['jpeg', 'png', 'webp', 'gif'].includes(meta.format)) fileIsValid = false
+      if (!['jpeg', 'png', 'webp'].includes(meta.format)) fileIsValid = false
     } catch (e) {
       fileIsValid = false
     }
