@@ -13,7 +13,7 @@ The project can be configured to track all kinds of things - here are a few exam
 * Tracking the occurences of wild animals; Bird watching.
 * ...
 
-![4](https://user-images.githubusercontent.com/3534507/156666000-80b3af8c-6fb1-43b2-8a2b-27f9c5fabfd2.png)
+![5](https://user-images.githubusercontent.com/3534507/157018363-bbc64351-fc50-49fe-b91d-b461663231d0.png)
 
 ## Backend (Node.JS + Express + Postgres)
 
