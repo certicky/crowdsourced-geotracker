@@ -39,8 +39,7 @@ CREATE TABLE public.reports
     valid_until timestamptz NOT NULL DEFAULT now() + interval '1 hour',
     description varchar(256),
     media_url varchar(256),
-    ip varchar(64),
-    CONSTRAINT reports_pkey PRIMARY KEY (id)
+    ip varchar(64)
 );
 ALTER TABLE public.reports OWNER to geotracker_user;
 CREATE INDEX report_location_idx ON reports USING GIST(location);
@@ -51,7 +50,7 @@ CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_un
 
 7. Copy the `settings.js.example` file to `settings.js` and update the values in it.
 8. Insert some reports from external data sources from by calling `node importExternalData.js`. This script can be called periodically using cron if you want to always have fresh external data in the DB. At the moment, it only fetches some reports from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>
-9. Run the backend: `npm run listen` or simply `node index.js`
+9. Run the backend: `npm run listen` or simply `node index.js`.
 10. The backend also serves the web frontend, so you can just open `http://localhost:3000/` in a browser to see the map (assuming that you use port 3000 in your `settings.js`).
 
 ### API
@@ -93,7 +92,7 @@ POST parameters:
 * Then just open `index.html` in your web browser.
 * Alternatively, if you have the backend running locally, you can access it at `http://localhost:3000/` (assuming you're using port 3000 in your backend's `settings.js`).
 
-Functions:
+### Functions:
 * The web displays a map of recent reports in the area. The default area displayed is set according to browser's location.
 * Users can report sightings via this web frontend by clicking anywhere on the map. Photos can be added to reports.
 * It's be possible to rewind the time back using a slider to see how the report locations changed over time.

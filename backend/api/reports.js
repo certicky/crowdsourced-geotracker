@@ -5,7 +5,8 @@ const {
   dbPort,
   dbHost,
   supportedTypes,
-  maximumImageUploadSizeMB
+  maximumImageUploadSizeMB,
+  skipImageProcessing
 } = require('../settings')
 const moment = require('moment')
 const sharp = require('sharp');
@@ -84,30 +85,36 @@ const createReport = async (request, response) => {
   if (request.files && request.files.mediafile && request.files.mediafile.size && request.files.mediafile.size <= (1024000 * maximumImageUploadSizeMB)) {
     const randomFileNameBeforeProcessing = '___' + getRandomFilename()
     const randomFileNameFinal = getRandomFilename()
-    let fileIsValid = true
-    await request.files.mediafile.mv('./file_uploads/' + randomFileNameBeforeProcessing)
 
-    // process the image using 'sharp' library
-    const f = await sharp('./file_uploads/' + randomFileNameBeforeProcessing)
-
-    // check format, resize, convert to PNG, save using 'sharp' library
-    try {
-      const meta = await f.metadata()
-      if (!['jpeg', 'png', 'webp'].includes(meta.format)) fileIsValid = false
-    } catch (e) {
-      fileIsValid = false
-    }
-    if (fileIsValid) {
-      await f.resize(1000, 1000, { fit: sharp.fit.inside, withoutEnlargement: true })
-        .toFormat('png')
-        .toFile('./file_uploads/' + randomFileNameFinal)
-
-      // save its filename to DB
+    if (skipImageProcessing) {
+      await request.files.mediafile.mv('./file_uploads/' + randomFileNameFinal)
       mediaUrlSQL = './file_uploads/' + randomFileNameFinal
-    }
+    } else {
+      await request.files.mediafile.mv('./file_uploads/' + randomFileNameBeforeProcessing)
+      let fileIsValid = true
 
-    // delete temporary file
-    fs.unlink('./file_uploads/' + randomFileNameBeforeProcessing, () => {})
+      // process the image using 'sharp' library
+      const f = await sharp('./file_uploads/' + randomFileNameBeforeProcessing)
+
+      // check format, resize, convert to PNG, save using 'sharp' library
+      try {
+        const meta = await f.metadata()
+        if (!['jpeg', 'png', 'webp'].includes(meta.format)) fileIsValid = false
+      } catch (e) {
+        fileIsValid = false
+      }
+      if (fileIsValid) {
+        await f.resize(1000, 1000, { fit: sharp.fit.inside, withoutEnlargement: true })
+          .toFormat('png')
+          .toFile('./file_uploads/' + randomFileNameFinal)
+
+        // save its filename to DB
+        mediaUrlSQL = './file_uploads/' + randomFileNameFinal
+      }
+
+      // delete temporary file
+      fs.unlink('./file_uploads/' + randomFileNameBeforeProcessing, () => {})
+    }
   }
 
   // prepare the INSERT query
