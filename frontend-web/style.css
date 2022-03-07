@@ -1,5 +1,5 @@
 html, body {
-  font-family: 'Roboto', sans-serif;
+  font-family: courier,courier new,serif;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -72,14 +72,14 @@ label {
 #about {
   position: absolute;
   width: calc(60% - 100px);
-  height: 10rem;
+  height: 9rem;
   bottom: 1rem;
   left: 1rem;
   background-color: white;
   border-radius: 0.25rem;
-  padding: 0.5rem;
+  padding: 1rem 0.5rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   overflow-y: auto;
 }
@@ -107,17 +107,24 @@ label {
 #controls .controls-row>div {
   width: 3.8rem;
   text-align: center;
+  word-break: break-all;
+  font-size: 0.9rem;
 }
 
 #controls button {
   margin: 0.25rem;
   font-weight: bold;
+  width: 5rem;
 }
 
 /* MOBILE DEVICES / SMALL SCREENS  */
 @media only screen and (min-device-width: 1px) and (max-device-width: 768px) {
   html, body, button, input, select, option {
     font-size: 40px;
+  }
+
+  .hidden-on-mobile {
+    display: none !important;
   }
 
   .gm-style .gm-style-iw {
@@ -129,6 +136,7 @@ label {
     width: 40%;
     left: 0.5rem;
     bottom: 0.5rem;
+    padding: 0.5rem;
   }
 
   #controls {
@@ -142,6 +150,7 @@ label {
 
   #controls button {
     font-size: 0.8rem;
+    width: 4rem;
   }
 
   #controls .controls-row>div {

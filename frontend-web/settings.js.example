@@ -20,8 +20,8 @@ const settings = {
         <li><b>Watch the map</b> to see <b>where the recent sightings</b> are.</li>
         <li>You can check where the sightings were in the past by using the controls on the right.</li>
       </ul>
-      <div style="font-size: 0.9rem">This is an open-source project. Anyone can get it <a href="https://github.com/certicky/crowdsourced-geotracker" target="_blank">from GitHub</a> and deploy their own copy in minutes.</div>
+      <div style="font-size: 0.9rem; margin-top: 1rem;">This is an open-source project. Anyone can get it <a href="https://github.com/certicky/crowdsourced-geotracker" target="_blank">from GitHub</a> and deploy their own copy in minutes.</div>
     </div>
-    <div style="padding-top: 1rem"><a href="https://github.com/certicky/crowdsourced-geotracker" target="_blank"><img src="res/github.png" title="View on GitHub" /></a></div>
+    <div style="padding-top: 1rem; padding-left: 1rem;"><a href="https://github.com/certicky/crowdsourced-geotracker" target="_blank"><img src="res/github.png" title="View on GitHub" /></a></div>
   `
 }

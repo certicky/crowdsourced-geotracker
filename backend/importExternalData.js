@@ -63,7 +63,7 @@ const main = async () => {
       const m = moment(dateLine.toLowerCase().replace('date: ', ''), 'DD/MM/YYYY')
       return {
         validfrom: m.clone().startOf('day').format('X'),
-        validuntil: m.clone().endOf('day').add(1, 'day').format('X')
+        validuntil: m.clone().endOf('day').add(2, 'day').format('X')
       }
     }
   }

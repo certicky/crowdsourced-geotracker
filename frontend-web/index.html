@@ -8,24 +8,25 @@
     <link rel="icon" type="image/x-icon" href="/res/favicon.png">
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <title>Crowdsourced GeoTracker</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="map"></div>
     <div id="about"></div>
     <div id="controls">
       <div class="controls-row">
-        <button onclick="decrementHour(24)">&lang;&lang; -1 day</button>
+        <button onclick="decrementHour(24)">&lang;&lang;&lang; -1 day</button>
         <div id="controls-date">-</div>
-        <button onclick="incrementHour(24)">+1 day &rang;&rang;</button>
+        <button onclick="incrementHour(24)">+1 day &rang;&rang;&rang;</button>
       </div>
       <div class="controls-row">
-        <button onclick="decrementHour(1)">&lang; -1 hour</button>
-        <div id="controls-time">-</div>
-        <button onclick="incrementHour(1)">+1 hour &rang;</button>
+        <button onclick="decrementHour(1)">&lang;&lang; -1 hour</button>
+        <div id="controls-hour">-</div>
+        <button onclick="incrementHour(1)">+1 hour &rang;&rang;</button>
+      </div>
+      <div class="controls-row hidden-on-mobile">
+        <button onclick="decrementHour(0.25)">&lang;&lang; -15 m.</button>
+        <div id="controls-minute">-</div>
+        <button onclick="incrementHour(0.25)">+15 m. &rang;&rang;</button>
       </div>
     </div>
 
@@ -78,9 +79,11 @@
         loadReportsFromAPI()
 
         const ctrlDateEl = document.querySelector('#controls-date')
-        const ctrlTimeEl = document.querySelector('#controls-time')
+        const ctrlHourEl = document.querySelector('#controls-hour')
+        const ctrlMinuteEl = document.querySelector('#controls-minute')
         ctrlDateEl.innerHTML = moment(parseInt(newTime), 'X').format('D. MMM.')
-        ctrlTimeEl.innerHTML = moment(parseInt(newTime), 'X').format('HH:mm')
+        ctrlHourEl.innerHTML = moment(parseInt(newTime), 'X').format('HH:mm')
+        ctrlMinuteEl.innerHTML = moment(parseInt(newTime), 'X').format('HH:mm')
       }
 
       function decrementHour (n = 1) {
