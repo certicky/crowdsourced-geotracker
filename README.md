@@ -3,7 +3,17 @@
 #### Attention:
 ```diff
 - If you'd like to help the project either as a programmer or by spreading the word, 
-- feel free to contact me at certicky (at) gmail (dot) com and I can give you access.
+- check the challenges below and contact me at certicky (at) gmail (dot) com.
+
+Current challenges for the community:
+- Getting the armytracker.com to the end users in Ukraine. Let people know it exists and that they can use it to track the invaders.
+- Writing scripts & bots to get more data. People's reports aren't the only possible source - example ideas:
+  -- parsing Twitter API for tweets about RU soldiers and using their geolocation? or other social networks?
+  -- getting access to some satellite or aerial imagery APIs and looking for locations there?
+  -- getting the locations or RU SIM cards and checking for higher than usual concentration?
+  -- connecting any data sources provided by UKR government?
+- Improving the web frontend - it's a very early prototype now.
+- Filtering of submitted reports on the backend (client IP's country of origin, checking blacklists, etc.).
 ```
 
 # Crowdsourced GeoTracker
