@@ -1,4 +1,10 @@
-#### Attention: Looking for developers, so we can deploy this ASAP. Please contact me at certicky (at) gmail (dot) com and I can give you access.
+#### LIVE DEMO: <https://armytracker.com/> (tracking the invading Russian army in Ukraine)
+
+#### Attention:
+```diff
+- If you'd like to help the project either as a programmer or by spreading the word, 
+- feel free to contact me at certicky (at) gmail (dot) com and I can give you access.
+```
 
 # Crowdsourced GeoTracker
 
