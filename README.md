@@ -3,7 +3,7 @@
 # Crowdsourced GeoTracker
 
 Crowdsourced GeoTracker is an open-source project that allows the public to **easily report and track the
-geolocation of anyone** or anything they spot outside, using a mobile app or web frontend.
+geolocation of anyone** or anything they spot outside.
 
 The project can be configured to track all kinds of things - here are a few examples:
 
@@ -94,29 +94,5 @@ POST parameters:
 
 Functions:
 * The web displays a map of recent reports in the area. The default area displayed is set according to browser's location.
-* Users can report sightings via this web frontend by clicking anywhere on the map.
-* (under construction) It will be possible to rewind the time back using a slider to see how the report locations changed over time.
-
-## Mobile App (React Native)
-
-### Installation
-* Set up your Android development environment, if haven’t done so. Make sure you can successfully run an Android app on an emulator.
-* Clone this repository: `git clone https://github.com/certicky/crowdsourced-geotracker.git`
-* Navigate to folder frontend-mobile: `cd crowdsourced-geotracker/frontend-mobile`
-* Install the dependencies: `npm install`
-* Install the react-native-cli globally: `npm install -g react-native-cli`
-* Copy the `/android/app/src/main/AndroidManifest.xml.example` file to `/android/app/src/main/AndroidManifest.xml` and update the value of `com.google.android.geo.API_KEY` in it. You need to provide your Google Maps API key.
-* Go to <https://console.cloud.google.com/apis/> and make sure you have the following enabled for your project: Google Play Android Developer API, Maps SDK for Android
-* Run `npm start -- --reset-cache` or `npx react-native start` and keep it running in the background. Watch its output while developing.
-* Run `react-native run-android`. That should open a window with the Android emulator running your app.
-* You can get more logs by calling `adb logcat`
-
-The app is under construction. Some planned functions and notes:
-* Report the sighting of an object of interest - the report location should be pre-set by the app automatically, using device's location (should be possible to adjust it manually).
-* Reporting needs to be very quick and simple. UI needs to be usable under non-ideal conditions.
-* An option to attach a photo of the sighting - it should be possible to take a picture directly from within the app. The picture should be sent downscaled to decrease data usage.
-* Taking a picture shouldn't make any sound.
-* If possible, the device's geolocation should only be enabled while sending the report. If it was disabled before reporting, it should auto-disable after the report is sent.
-* When users aren't reporting a sighting, the app should display a map of recent reports around them.
-
-
+* Users can report sightings via this web frontend by clicking anywhere on the map. Photos can be added to reports.
+* It's be possible to rewind the time back using a slider to see how the report locations changed over time.
