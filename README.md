@@ -9,6 +9,7 @@ Current challenges for the community:
 - Getting the armytracker.com to the end users in Ukraine. Let people know it exists and that they can use it to track the invaders.
 - Writing scripts & bots to get more data. People's reports aren't the only possible source - example ideas:
   -- parsing Twitter API for tweets about RU soldiers and using their geolocation? or other social networks?
+  -- getting the location of soldiers from Tinder API?
   -- getting access to some satellite or aerial imagery APIs and looking for locations there?
   -- getting the locations or RU SIM cards and checking for higher than usual concentration?
   -- connecting any data sources provided by UKR government?
