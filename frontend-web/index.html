@@ -168,7 +168,7 @@
                   if (loc.type) content += '<div class="marker-tt-valid-from">' + moment(loc.valid_from).format('D. MMM. YYYY HH:mm') + '</div>'
 
                   // media: Twitter link
-                  if (loc.media_url && loc.media_url.includes('twitter.com')) {
+                  if (loc.media_url && (loc.media_url.includes('twitter.com/') || loc.media_url.includes('t.co/'))) {
                     content += '<div id="tweet-container-' + loc.id + '" class="marker-tt-tweet"></div>'
                     setTimeout(() => {
                       twttr.widgets.createTweet(
