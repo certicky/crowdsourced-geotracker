@@ -70,10 +70,10 @@ res = tweepy.Cursor(api.search, q="""
 		helicop OR
 		plane
 	)""",
-	geocode='49.625357,31.670440,1000km',
+	geocode='49.625357,31.670440,1500km',
 	result_type='recent',
 	tweet_mode='extended'
-).items(100)
+).items(250)
 
 found = 0
 for tweet in res:
