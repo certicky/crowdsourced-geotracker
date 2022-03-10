@@ -187,6 +187,11 @@
                     content += '<a class="marker-tt-photo" href="' + settings.backendUrl + loc.media_url.replace('./file_uploads/', '/') + '" target="_blank"><img src="' + settings.backendUrl + loc.media_url.replace('./file_uploads/', '/') + '" /></a>'
                   }
 
+                  // media: telegram posts
+                  if (loc.media_url && loc.media_url.includes('https://t.me/')) {
+                    content += '<br /><br />Source <b>Telegram</b> link: <a target="_blank" href="' + loc.media_url + '">' + loc.media_url + '</a>'
+                  }
+
                   // close other tooltips before opening this one
                   if (addReportTooltip) addReportTooltip.close()
                   Object.values(markers).forEach(m => {
