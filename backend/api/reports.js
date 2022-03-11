@@ -76,8 +76,8 @@ const createReport = async (request, response) => {
   const validFromSQL = parseInt(validfrom) || currentTimeStamp
   const validUntilSQL = parseInt(validuntil) || (
       validFromSQL !== currentTimeStamp
-        ? validFromSQL + 3600
-        : currentTimeStamp + 3600
+        ? validFromSQL + (3600 * 3) // default validity, if not specified, is 3 hours
+        : currentTimeStamp + (3600 * 3) // default validity, if not specified, is 3 hours
     )
 
   // process the uploaded image if it exists
