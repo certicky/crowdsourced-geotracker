@@ -165,7 +165,7 @@
                   // content for the 'Add Report' tooltip
                   let content = ''
                   if (loc.description) content += '<div class="marker-tt-description">' + loc.description + '</div>'
-                  if (loc.type) content += '<div class="marker-tt-type">' + loc.type + '</div>'
+                  if (loc.type) content += '<div class="marker-tt-type">Reported as <i>' + loc.type + '</i></div>'
                   if (loc.lat && loc.lon) content += '<div class="marker-tt-location">' + loc.lat + ', ' + loc.lon + '</div>'
                   if (loc.type) content += '<div class="marker-tt-valid-from">' + moment(loc.valid_from).format('D. MMM. YYYY HH:mm') + '</div>'
 

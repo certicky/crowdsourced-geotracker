@@ -31,8 +31,7 @@ label {
 }
 
 .marker-tt-type {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .marker-tt-tweet {
@@ -47,6 +46,10 @@ label {
 
 .marker-tt-photo img {
   width: 100%;
+}
+
+.marker-tt-valid-from {
+  font-weight: bold;
 }
 
 .report-add-form select,
@@ -155,5 +158,16 @@ label {
 
   #controls .controls-row>div {
     width: 2rem;
+  }
+
+  .gm-style-iw.gm-style-iw-c button.gm-ui-hover-effect {
+    width: 80px !important;
+    height: 80px !important;
+    background: white !important;
+  }
+  .gm-style-iw.gm-style-iw-c button.gm-ui-hover-effect img {
+    width: 80px !important;
+    height: 80px !important;
+    margin: 0 !important;
   }
 }
