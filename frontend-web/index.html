@@ -141,6 +141,7 @@
           if (locations && locations.length) {
             locations.forEach(loc => {
               if (!markers[loc.id]) {
+                const reportAgeMinutes = moment(displayedTime, 'X').diff(loc.valid_from, 'minutes')
                 markers[loc.id] = loc
                 markers[loc.id].markerObject = new google.maps.Marker({
                   position: new google.maps.LatLng(loc.lat, loc.lon),
@@ -155,7 +156,8 @@
                     strokeColor: getMarkerColorFromType(loc.type),
                     fillColor: getMarkerColorFromType(loc.type),
                     strokeWeight: 2,
-                    fillOpacity: 0.5,
+                    fillOpacity: (reportAgeMinutes <= 60) ? 1 : 0.35,
+                    strokeOpacity: (reportAgeMinutes <= 60) ? 1 : 0.45,
                     scale: isMobileDevice ? 30 : 9
                   }
                 })
