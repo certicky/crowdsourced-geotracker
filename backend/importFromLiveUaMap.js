@@ -43,20 +43,24 @@ const main = async () => {
       'thermobaric',
       'mlrs',
       'buk',
-      'armor'
+      'armor',
+      'missile',
+      'vehicle'
     ].some(str => rec.name.toLowerCase().includes(str))) return 'VEHICLES'
     // AIRCRAFT
     if ([
       'jets',
       'helicop',
-      'plane'
+      'plane',
+      'air'
     ].some(str => rec.name.toLowerCase().includes(str))) return 'AIRCRAFT'
     // INFANTRY (default)
     return 'INFANTRY'
   }
 
   data.venues.forEach(rec => {
-    const isRelevant = ['russia', 'military'].some(str => rec.name.toLowerCase().includes(str)) || ['VEHICLES', 'AIRCRAFT'].includes(getTypeFromRec(rec))
+    let isRelevant = ['russia', 'military', 'shell'].some(str => rec.name.toLowerCase().includes(str)) || ['VEHICLES', 'AIRCRAFT'].includes(getTypeFromRec(rec))
+    if(['president', 'zelensky', 'putin', 'lavrov', 'lukashenk', 'minist', 'conference'].some(str => rec.name.toLowerCase().includes(str))) isRelevant = false
     if (isRelevant) {
       console.log('==============')
       console.log(getTypeFromRec(rec))
@@ -69,7 +73,7 @@ const main = async () => {
           lon: parseFloat(rec.lng),
           type: getTypeFromRec(rec),
           validfrom: rec.timestamp,
-          validuntil: rec.timestamp + (86400 * 1), // validity: 1 day
+          validuntil: rec.timestamp + (3600 * 6), // validity: 6 hours
           description: rec.name ? rec.name.substring(0, 255) : undefined,
           mediaurl: rec.source || undefined
         },

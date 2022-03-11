@@ -44,13 +44,16 @@ const main = async () => {
         'thermobaric',
         'mlrs',
         'buk',
-        'armor'
+        'armor',
+        'missile',
+        'vehicle'
       ].some(str => rec.properties.title.toLowerCase().includes(str) || rec.properties.description.toLowerCase().includes(str))) return 'VEHICLES'
       // AIRCRAFT
       if ([
         'jets',
         'helicop',
-        'plane'
+        'plane',
+        'air'
       ].some(str => rec.properties.title.toLowerCase().includes(str) || rec.properties.description.toLowerCase().includes(str))) return 'AIRCRAFT'
     }
     // INFANTRY (default)
