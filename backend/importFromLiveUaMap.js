@@ -60,7 +60,7 @@ const main = async () => {
 
   data.venues.forEach(rec => {
     let isRelevant = ['russia', 'military', 'shell'].some(str => rec.name.toLowerCase().includes(str)) || ['VEHICLES', 'AIRCRAFT'].includes(getTypeFromRec(rec))
-    if(['president', 'zelensky', 'putin', 'lavrov', 'lukashenk', 'minist', 'conference'].some(str => rec.name.toLowerCase().includes(str))) isRelevant = false
+    if(['president', 'zelensky', 'putin', 'lavrov', 'lukashenk', 'minist', 'conference', 'kremlin'].some(str => rec.name.toLowerCase().includes(str))) isRelevant = false
     if (isRelevant) {
       console.log('==============')
       console.log(getTypeFromRec(rec))
