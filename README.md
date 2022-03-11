@@ -66,7 +66,7 @@ CREATE UNIQUE INDEX duplicates_constraint ON reports (type, valid_from, valid_un
 ```
 
 7. Copy the `settings.js.example` file to `settings.js` and update the values in it.
-8. Insert some reports from external data sources from by calling `node importExternalData.js`. This script can be called periodically using cron if you want to always have fresh external data in the DB. At the moment, it only fetches some reports from <https://maphub.net/Cen4infoRes/russian-ukraine-monitor>
+8. You can insert some reports from external data sources from by calling some of the `/backend/import*` scripts. These scripts can be called periodically using cron if you want to always have fresh external data in the DB. The DB indexes prevent adding duplicate entries when the scripts are called repeatedly.
 9. Run the backend: `npm run listen` or simply `node index.js`.
 10. The backend also serves the web frontend, so you can just open `http://localhost:3000/` in a browser to see the map (assuming that you use port 3000 in your `settings.js`).
 
