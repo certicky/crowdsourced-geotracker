@@ -1,5 +1,5 @@
 const fetch = require('node-fetch')
-const reports = require('./api/reports')
+const reports = require('../api/reports')
 const moment = require('moment')
 
 const main = async () => {
@@ -46,7 +46,8 @@ const main = async () => {
         'buk',
         'armor',
         'missile',
-        'vehicle'
+        'vehicle',
+        'artillery'
       ].some(str => rec.properties.title.toLowerCase().includes(str) || rec.properties.description.toLowerCase().includes(str))) return 'VEHICLES'
       // AIRCRAFT
       if ([

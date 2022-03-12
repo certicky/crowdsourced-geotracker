@@ -24,7 +24,10 @@ def getTypeFromRec (rec):
 		'thermobaric',
 		'mlrs',
 		'buk',
-		'armor'
+		'armor',
+		'missile',
+        'vehicle',
+		'artillery'
 	]): return 'VEHICLES'
 
 	if any(text in rec for text in [
@@ -66,6 +69,9 @@ res = tweepy.Cursor(api.search, q="""
 		mlr OR
 		buk OR
 		armor OR
+		missile OR
+		vehicle OR
+		artillery OR
 		jets OR
 		helicop OR
 		plane
