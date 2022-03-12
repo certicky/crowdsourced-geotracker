@@ -167,7 +167,7 @@
                   if (loc.description) content += '<div class="marker-tt-description">' + loc.description + '</div>'
                   if (loc.type) content += '<div class="marker-tt-type">Reported as <i>' + loc.type + '</i></div>'
                   if (loc.lat && loc.lon) content += '<div class="marker-tt-location">' + loc.lat + ', ' + loc.lon + '</div>'
-                  if (loc.type) content += '<div class="marker-tt-valid-from">' + moment(loc.valid_from).format('D. MMM. YYYY HH:mm') + '</div>'
+                  if (loc.type) content += '<div class="marker-tt-valid-from">' + moment(loc.valid_from).format(moment(loc.valid_from).format('HH:mm') === '00:00' ? 'D. MMM. YYYY' : 'D. MMM. YYYY HH:mm') + '</div>'
 
                   // media: Twitter link
                   if (loc.media_url && (loc.media_url.includes('twitter.com/'))) {
