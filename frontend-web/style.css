@@ -85,6 +85,7 @@ label {
   align-items: flex-start;
   justify-content: center;
   overflow-y: auto;
+  box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
 }
 
 #about img {
@@ -100,6 +101,7 @@ label {
   border-radius: 0.25rem;
   padding: 0.5rem;
   align-items: center;
+  box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
 }
 
 #controls .controls-row {
@@ -118,6 +120,39 @@ label {
   margin: 0.25rem;
   font-weight: bold;
   width: 5rem;
+}
+
+#stats {
+  position: absolute;
+  width: calc(100% - 30rem);
+  top: 10px;
+  left: 15rem;
+  background-color: white;
+  border-radius: 0.25rem;
+  padding: 5px;
+  align-items: center;
+  display: flex;
+  overflow: hidden;
+  box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
+}
+
+.stats-col {
+  width: 15px;
+  background-color: #7B241C;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.stats-col:hover {
+  opacity: 1;
+}
+
+.stats-date-divider {
+  width: 1px;
+  background-color: gray;
+  overflow: visible;
+  font-size: 70%;
+  white-space: nowrap;
 }
 
 /* MOBILE DEVICES / SMALL SCREENS  */

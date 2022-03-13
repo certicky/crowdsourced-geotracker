@@ -32,6 +32,7 @@
         <button onclick="incrementHour(0.25)">+15 m. &rang;</button>
       </div>
     </div>
+    <div id="stats" class="hidden-on-mobile"></div>
 
     <script type="text/javascript">
       const isMobileDevice = (screen.width <= 768)
@@ -62,6 +63,30 @@
         })
         oReq.open('POST', settings.backendUrl + uri)
         oReq.send(formData)
+      }
+
+      function renderStatistics () {
+        const statsEl = document.querySelector('#stats')
+        if (!isMobileDevice && statsEl && projectMetadata && projectMetadata.validReportsInTime) {
+          const maxHeightPx = 50
+          let maxInHour = 0
+          projectMetadata.validReportsInTime.forEach(h => {
+            if (parseInt(h.valid_reports) > maxInHour) maxInHour = parseInt(h.valid_reports)
+          })
+          let content = ''
+          let previousDate = ''
+          projectMetadata.validReportsInTime.forEach(h => {
+            content += '<div class="stats-col" style="height: ' + Math.round((h.valid_reports / maxInHour) * maxHeightPx) + 'px;" onclick="setDisplayedTime(' + moment(h.hour).format('X') + ')" title="' + moment(h.hour).format('D. MMM. YYYY HH:mm') + '"></div>'
+            const currentDate = moment(h.hour).format('D. MMM.')
+            if (currentDate !== previousDate) {
+              if (previousDate !== '') content += '<div class="stats-date-divider" style="height: ' + maxHeightPx + 'px;" >&nbsp;' + currentDate + '</div>'
+              previousDate = currentDate
+            }
+          })
+
+          statsEl.innerHTML = content
+          console.log('maxInHour',maxInHour)
+        }
       }
 
       // Assigns a marker color based on report type
@@ -323,7 +348,10 @@
 
       // load project's metadata
       requestAPIGet ('/metadata', null, (response) => {
-        if (response) projectMetadata = JSON.parse(response)
+        if (response) {
+          projectMetadata = JSON.parse(response)
+          renderStatistics()
+        }
       })
 
       // load Google Maps

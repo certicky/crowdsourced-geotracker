@@ -34,7 +34,7 @@ const getMetadata = async (request, response) => {
     WHERE
       valid_from <= hour AND valid_until >= hour
     GROUP BY hour
-    ORDER BY hour DESC
+    ORDER BY hour ASC
   `
   await pool.query(query, (error, results) => {
     if (error) {
