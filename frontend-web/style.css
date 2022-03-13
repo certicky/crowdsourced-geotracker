@@ -130,7 +130,7 @@ label {
   background-color: white;
   border-radius: 0.25rem;
   padding: 5px;
-  align-items: center;
+  align-items: end;
   display: flex;
   overflow: hidden;
   box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
@@ -143,6 +143,11 @@ label {
   opacity: 0.6;
 }
 
+.stats-col.is-displayed-time {
+  background-color: red;
+  opacity: 0.85;
+}
+
 .stats-col:hover {
   opacity: 1;
 }
@@ -153,6 +158,16 @@ label {
   overflow: visible;
   font-size: 70%;
   white-space: nowrap;
+}
+
+.stats-title {
+  font-size: 70%;
+  background-color: white;
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+  padding: 0.25rem;
+  border-top-right-radius: 0.25rem;
 }
 
 /* MOBILE DEVICES / SMALL SCREENS  */
