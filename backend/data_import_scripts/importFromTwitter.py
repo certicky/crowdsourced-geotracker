@@ -26,7 +26,7 @@ def getTypeFromRec (rec):
 		'buk',
 		'armor',
 		'missile',
-        'vehicle',
+		'vehicle',
 		'artillery'
 	]): return 'VEHICLES'
 
@@ -76,10 +76,9 @@ res = tweepy.Cursor(api.search, q="""
 		helicop OR
 		plane
 	)""",
-	geocode='49.625357,31.670440,1500km',
 	result_type='recent',
 	tweet_mode='extended'
-).items(250)
+).items(500)
 
 found = 0
 for tweet in res:
@@ -87,18 +86,24 @@ for tweet in res:
 
 	coordsFound = getCoordsFromText(data['full_text'])
 	if coordsFound:
-		found += 1
-		datetimeObj = parser.parse(data['created_at'])
-		postData = {
-			'lat': float(coordsFound['latitude']),
-			'lon': float(coordsFound['longitude']),
-			'type': getTypeFromRec(data['full_text']),
-			'validfrom': int(time.mktime(datetimeObj.timetuple())),
-			'validuntil': int(time.mktime(datetimeObj.timetuple())) + (86400 * 2), # validity: 2 days
-			'description': data['full_text'][0:255],
-			'mediaurl': 'https://twitter.com/' + data['user']['screen_name'] + '/status/' + data['id_str']
-		}
-		print(data['created_at'], postData)
-		requests.post(CROWDSOURCED_GEOTRACKER_API_URL.strip('/reports').strip('/') + '/reports', data = postData)
+		clatmin = 44.12810823870789
+		clngmin = 21.30785244768581
+		clatmax = 51.92494910764881
+		clngmax = 39.789226501012976
+
+		if coordsFound['latitude'] >= clatmin and coordsFound['latitude'] <= clatmax and coordsFound['longitude'] >= clngmin and coordsFound['longitude'] <= clngmax:
+			found += 1
+			datetimeObj = parser.parse(data['created_at'])
+			postData = {
+				'lat': float(coordsFound['latitude']),
+				'lon': float(coordsFound['longitude']),
+				'type': getTypeFromRec(data['full_text']),
+				'validfrom': int(time.mktime(datetimeObj.timetuple())),
+				'validuntil': int(time.mktime(datetimeObj.timetuple())) + (86400 * 2), # validity: 2 days
+				'description': data['full_text'][0:255],
+				'mediaurl': 'https://twitter.com/' + data['user']['screen_name'] + '/status/' + data['id_str']
+			}
+			print(data['created_at'], postData)
+			requests.post(CROWDSOURCED_GEOTRACKER_API_URL.strip('/reports').strip('/') + '/reports', data = postData)
 
 print('Total posted:', found)
