@@ -5,7 +5,7 @@
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script type="text/javascript" src="./settings.js"></script>
     <script type="text/javascript" src="./map-styles.js"></script>
-    <link rel="icon" type="image/x-icon" href="/res/favicon.png">
+    <link rel="icon" type="image/x-icon" href="./res/favicon.png">
     <link rel="stylesheet" type="text/css" href="./style.css?v=3" />
     <title>Crowdsourced GeoTracker</title>
     <meta property="og:image" content="./res/crowdsourced-geotracker-preview.png">
@@ -77,12 +77,12 @@
           let content = ''
           let previousDate = ''
           projectMetadata.validReportsInTime.forEach(h => {
-            content += '<div class="stats-col' + ((moment(h.hour).isSame(moment(displayedTime, 'X'), 'hour')) ? ' is-displayed-time' : '') + '" style="height: ' + Math.round((h.valid_reports / maxInHour) * maxHeightPx) + 'px;" onclick="setDisplayedTime(' + moment(h.hour).format('X') + ')" title="' + moment(h.hour).format('D. MMM. YYYY HH:mm') + '"></div>'
             const currentDate = moment(h.hour).format('D. MMM.')
             if (currentDate !== previousDate) {
               if (previousDate !== '') content += '<div class="stats-date-divider" style="height: ' + maxHeightPx + 'px;" >&nbsp;' + currentDate + '</div>'
               previousDate = currentDate
             }
+            content += '<div class="stats-col' + ((moment(h.hour).isSame(moment(displayedTime, 'X'), 'hour')) ? ' is-displayed-time' : '') + '" style="height: ' + Math.round((h.valid_reports / maxInHour) * maxHeightPx) + 'px;" onclick="setDisplayedTime(' + moment(h.hour).format('X') + ')" title="' + moment(h.hour).format('D. MMM. YYYY HH:mm') + '"></div>'
           })
 
           content += '<div class="stats-title">Report counts over time</div>'
