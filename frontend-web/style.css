@@ -210,6 +210,13 @@ label {
     width: 2rem;
   }
 
+  #stats {
+    max-width: calc(100% - 160px);
+    width: calc(15px * 48);
+    left: 20px;
+    top: 120px;
+  }
+
   .gm-style-iw.gm-style-iw-c button.gm-ui-hover-effect {
     width: 80px !important;
     height: 80px !important;

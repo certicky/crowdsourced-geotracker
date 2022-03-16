@@ -6,7 +6,7 @@
     <script type="text/javascript" src="./settings.js"></script>
     <script type="text/javascript" src="./map-styles.js"></script>
     <link rel="icon" type="image/x-icon" href="./res/favicon.png">
-    <link rel="stylesheet" type="text/css" href="./style.css?v=3" />
+    <link rel="stylesheet" type="text/css" href="./style.css?v=4" />
     <title>Crowdsourced GeoTracker</title>
     <meta property="og:image" content="./res/crowdsourced-geotracker-preview.png">
     <meta property="og:url" content="./">
@@ -32,7 +32,7 @@
         <button onclick="incrementHour(0.25)">+15 m. &rang;</button>
       </div>
     </div>
-    <div id="stats" class="hidden-on-mobile"></div>
+    <div id="stats"></div>
 
     <script type="text/javascript">
       const isMobileDevice = (screen.width <= 768)
@@ -68,15 +68,18 @@
       // Displays the numbers of valid reports for each hour in last 14 days in the timeline at the top
       function renderStatistics () {
         const statsEl = document.querySelector('#stats')
-        if (!isMobileDevice && statsEl && projectMetadata && projectMetadata.validReportsInTime) {
-          const maxHeightPx = 50
+        if (statsEl && projectMetadata && projectMetadata.validReportsInTime) {
+          const maxHeightPx = isMobileDevice ? 150 : 50
           let maxInHour = 0
-          projectMetadata.validReportsInTime.forEach(h => {
+          const validReports = isMobileDevice
+            ? projectMetadata.validReportsInTime.slice(-48)
+            : projectMetadata.validReportsInTime
+          validReports.forEach(h => {
             if (parseInt(h.valid_reports) > maxInHour) maxInHour = parseInt(h.valid_reports)
           })
           let content = ''
           let previousDate = ''
-          projectMetadata.validReportsInTime.forEach(h => {
+          validReports.forEach(h => {
             const currentDate = moment(h.hour).format('D. MMM.')
             if (currentDate !== previousDate) {
               if (previousDate !== '') content += '<div class="stats-date-divider" style="height: ' + maxHeightPx + 'px;" >&nbsp;' + currentDate + '</div>'
@@ -85,7 +88,7 @@
             content += '<div class="stats-col' + ((moment(h.hour).isSame(moment(displayedTime, 'X'), 'hour')) ? ' is-displayed-time' : '') + '" style="height: ' + Math.round((h.valid_reports / maxInHour) * maxHeightPx) + 'px;" onclick="setDisplayedTime(' + moment(h.hour).format('X') + ')" title="' + moment(h.hour).format('D. MMM. YYYY HH:mm') + '"></div>'
           })
 
-          content += '<div class="stats-title">Report counts over time</div>'
+          content += '<div class="stats-title">Reports over time</div>'
 
           statsEl.innerHTML = content
         }
@@ -255,7 +258,7 @@
       function init () {
         // create the map
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: isMobileDevice ? 14 : 7,
+          zoom: 7,
           center: settings.mapDefaultLocation,
           mapTypeId: 'roadmap',
           controlSize: isMobileDevice ? 80 : undefined,
@@ -302,6 +305,14 @@
         // listen for map click and create marker + open tooltip
         google.maps.event.addListener(map, 'click', (e) => {
           closeAddReportInterface()
+
+          const someMarkerOpen = Object.values(markers).find(m => !!m.markerTooltip)
+          if (someMarkerOpen) {
+            someMarkerOpen.markerTooltip.close()
+            someMarkerOpen.markerTooltip = null
+            return false
+          }
+
           addReportMarker = new google.maps.Marker({
             position: e.latLng,
             map: map,
@@ -331,7 +342,10 @@
 
           // close other tooltips before opening this one
           Object.values(markers).forEach(m => {
-            if (m.markerTooltip) m.markerTooltip.close()
+            if (m.markerTooltip) {
+              m.markerTooltip.close()
+              m.markerTooltip = null
+            }
           })
 
           addReportTooltip = new google.maps.InfoWindow({
