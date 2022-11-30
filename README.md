@@ -1,22 +1,3 @@
-#### LIVE DEMO: <https://armytracker.com/> (tracking the invading Russian army in Ukraine)
-
-#### Attention:
-```diff
-- If you'd like to help the project either as a programmer or by spreading the word, 
-- check the challenges below and contact me at certicky (at) gmail (dot) com.
-
-Current challenges for the community:
-- Getting the armytracker.com to the end users in Ukraine. Let people know it exists and that they can use it to track the invaders.
-- Writing scripts & bots to get more data. People's reports aren't the only possible source - example ideas:
-  -- parsing Twitter API for tweets about RU soldiers and using their geolocation? or other social networks?
-  -- getting the location of soldiers from Tinder API?
-  -- getting access to some satellite or aerial imagery APIs and looking for locations there?
-  -- getting the locations or RU SIM cards and checking for higher than usual concentration?
-  -- connecting any data sources provided by UKR government?
-- Improving the web frontend - it's a very early prototype now.
-- Filtering of submitted reports on the backend (client IP's country of origin, checking blacklists, etc.).
-```
-
 # Crowdsourced GeoTracker
 
 Crowdsourced GeoTracker is an open-source project that allows the public to **easily report and track the
@@ -24,8 +5,8 @@ geolocation of anyone** or anything they spot outside.
 
 The project can be configured to track all kinds of things - here are a few examples:
 
-* **Civilians can report on the movements of an inviding army when they see them, so others are able to prepare (evacuate or get ready to defend).**
 * Citizens can report damaged public equipement to local authorities / municipalities, so they can quickly make repairs.
+* Civilians can report on the movements of an inviding army when they see them, so others are able to prepare / evacuate.
 * Drivers can report traffic accidents or delays.
 * Tracking the occurences of wild animals; Bird watching.
 * ...
